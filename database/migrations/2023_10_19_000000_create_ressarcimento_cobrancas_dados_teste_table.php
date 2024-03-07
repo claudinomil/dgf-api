@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRessarcimentoCobrancasDadosTable extends Migration
+class CreateRessarcimentoCobrancasDadosTesteTable extends Migration
 {
     public function up()
     {
-        Schema::create('ressarcimento_cobrancas_dados', function (Blueprint $table) {
+        Schema::create('ressarcimento_cobrancas_dados_teste', function (Blueprint $table) {
             $table->id();
 
             //Campos de referência em outras tabelas
@@ -108,6 +108,6 @@ class CreateRessarcimentoCobrancasDadosTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('ressarcimento_cobrancas_dados');
+        Schema::dropIfExists('ressarcimento_cobrancas_dados_teste');
     }
 }
