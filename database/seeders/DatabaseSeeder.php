@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             PoderesSeeder::class,
             TratamentosSeeder::class,
             VocativosSeeder::class,
+            LayoutsStylesSeeder::class,
+            LayoutsModesSeeder::class
         ]);
     }
 }

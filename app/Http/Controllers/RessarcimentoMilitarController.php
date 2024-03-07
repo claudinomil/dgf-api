@@ -98,10 +98,8 @@ class RessarcimentoMilitarController extends Controller
 
                 //Verificar Relacionamentos'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                 //Tabela Pagamentos
-                $qtd = DB::table('ressarcimento_pagamentos')->where('ressarcimento_militar_id', $id)->count();
-
-                if ($qtd > 0) {
-                    return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado com Pagamentos.', 2040, null, null), 200);
+                if (SuporteFacade::verificarRelacionamento('ressarcimento_pagamentos', 'ressarcimento_militar_id', $id) > 0) {
+                    return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado com Ressarcimento Pagamentos.', 2040, null, null), 200);
                 }
                 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

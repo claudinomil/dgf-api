@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Grupo extends Model
+class LayoutMode extends Model
 {
     use HasFactory;
 
-    protected $table = 'grupos';
+    protected $table = 'layouts_modes';
 
     protected $fillable = [
         'name',
-        'controle_transacao'
+        'descricao',
+        'ativo'
     ];
-
-    public function setNameAttribute($value) {$this->attributes['name'] = mb_strtoupper($value);}
 }

@@ -127,9 +127,7 @@ class RessarcimentoPagamentoController extends Controller
 
                 //Verificar Relacionamentos'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                 //Tabela Ressarcimento Cobrança Dados
-                $qtd = DB::table('ressarcimento_cobrancas_dados')->where('ressarcimento_pagamento_id', $id)->count();
-
-                if ($qtd > 0) {
+                if (SuporteFacade::verificarRelacionamento('ressarcimento_cobrancas_dados', 'ressarcimento_pagamento_id', $id) > 0) {
                     return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado em Cobranças.', 2040, null, null), 200);
                 }
                 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''

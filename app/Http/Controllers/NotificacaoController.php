@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\API\ApiReturn;
+use App\Facades\SuporteFacade;
 use App\Http\Requests\NotificacaoStoreRequest;
 use App\Http\Requests\NotificacaoUpdateRequest;
 use App\Models\NotificacaoRead;
@@ -118,10 +119,8 @@ class NotificacaoController extends Controller
                 //Verificar Relacionamentos'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
                 //Tabela notificacoes_lidas
-                $qtd = DB::table('notificacoes_lidas')->where('notificacao_id', $id)->count();
-
-                if ($qtd > 0) {
-                    return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado em outras tabelas.', 2040, null, null), 200);
+                if (SuporteFacade::verificarRelacionamento('notificacoes_lidas', 'notificacao_id', $id) > 0) {
+                    return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado com Notificações não Lidas.', 2040, null, null), 200);
                 }
                 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

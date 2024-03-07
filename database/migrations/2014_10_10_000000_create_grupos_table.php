@@ -16,6 +16,12 @@ class CreateGruposTable extends Migration
         Schema::create('grupos', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+
+            //Campo para ser alterado sempre
+            //para forçar que faça a gravação das Transações das Permissões, dashboards e Relatórios
+            //nunca vai se repetir
+            $table->string('controle_transacao')->nullable();
+
             $table->timestamps();
         });
     }

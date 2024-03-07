@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\GrupoDashboard;
+use App\Models\GrupoPermissao;
+use App\Models\GrupoRelatorio;
 use App\Models\RessarcimentoCobranca;
 use App\Models\RessarcimentoCobrancaDado;
 use App\Models\RessarcimentoCobrancaPdfListagem;
@@ -9,6 +12,8 @@ use App\Models\RessarcimentoCobrancaPdfListagemDado;
 use App\Models\RessarcimentoCobrancaPdfNota;
 use App\Models\RessarcimentoCobrancaPdfOficio;
 use App\Models\RessarcimentoRecebimento;
+use App\Models\Transacao;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class SuporteService
@@ -453,5 +458,66 @@ class SuporteService
         }
 
         return $rg;
+    }
+
+    /*
+     * Verificar relacionamento em tabela
+     * Retornar quantidade de registros
+     */
+    public function verificarRelacionamento($table, $field, $value)
+    {
+        $qtd = DB::table($table)->where($field, $value)->count();
+
+        return $qtd;
+    }
+
+    //Alterando Transações: colocando abaixo as Permissões, Dashboards e Relatórios'''''''''''''''''''''''''''''
+    //Pegando informação do campo "dados" da transação gravada
+    public function gravarTransacaoGrupo($grupo_id, $controle_transacao) {
+        $transacao = Transacao::select('dados')->where('dados', 'like', '%'.$controle_transacao.'%')->get()[0];
+
+        $dados = $transacao['dados'];
+
+        //Permissões
+        $dados .= '<br>'.'<b>:: Permissões</b>'.'<br><br>';
+
+        $permissoes = GrupoPermissao
+            ::join('permissoes', 'permissoes.id', 'grupos_permissoes.permissao_id')
+            ->select('description')
+            ->where('grupos_permissoes.grupo_id', $grupo_id)
+            ->get();
+
+        foreach ($permissoes as $permissao) {
+            $dados .= ':: ' . $permissao['description'] . "<br>";
+        }
+
+        //Dashboards
+        $dados .= '<br>'.'<b>:: Dashboards</b>'.'<br><br>';
+
+        $dashboards = GrupoDashboard
+            ::join('dashboards', 'dashboards.id', 'grupos_dashboards.dashboard_id')
+            ->select('dashboards.name')
+            ->where('grupos_dashboards.grupo_id', $grupo_id)
+            ->get();
+
+        foreach ($dashboards as $dashboard) {
+            $dados .= ':: ' . $dashboard['name'] . "<br>";
+        }
+
+        //Relatorios
+        $dados .= '<br>'.'<b>:: Relatórios</b>'.'<br><br>';
+
+        $relatorios = GrupoRelatorio
+            ::join('relatorios', 'relatorios.id', 'grupos_relatorios.relatorio_id')
+            ->select('relatorios.name')
+            ->where('grupos_relatorios.grupo_id', $grupo_id)
+            ->get();
+
+        foreach ($relatorios as $relatorio) {
+            $dados .= ':: ' . $relatorio['name'] . "<br>";
+        }
+
+        //Transação editando
+        Transacao::where('dados', 'like', '%'.$controle_transacao.'%')->update(['dados' => $dados]);
     }
 }

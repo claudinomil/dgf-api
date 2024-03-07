@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Grupo;
-use App\Models\GrupoPermissao;
 use App\Models\Transacao;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -57,7 +55,6 @@ class Z_FakerSeeder extends Seeder
                 'email' => $faker->email,
                 'password' => Hash::make('claudino1971'),
                 'email_verified_at' => now(),
-                'user_confirmed_at' => now(),
                 'avatar' => 'build/assets/images/users/avatar-0.png',
                 'layout_mode' => 'layout_mode_light',
                 'layout_style' => 'layout_style_vertical_scrollable',

@@ -13,17 +13,16 @@ Route::prefix('users')->group(function () {
     Route::get('/auxiliary/tables', [UserController::class, 'auxiliary'])->middleware(['auth:api', 'scope:claudino']);
 
     Route::get('/profiledata/{id}', [UserController::class, 'profileData'])->middleware(['auth:api', 'scope:claudino']);
-    Route::put('/updateavatar/{id}', [UserController::class, 'updateAvatar'])->middleware(['auth:api', 'scope:claudino']);
-    Route::put('/editpassword/{id}', [UserController::class, 'editPassword'])->middleware(['auth:api', 'scope:claudino']);
-    Route::put('/editemail/{id}', [UserController::class, 'editEmail'])->middleware(['auth:api', 'scope:claudino']);
-    Route::put('/editmodestyle/{id}', [UserController::class, 'editmodestyle'])->middleware(['auth:api', 'scope:claudino']);
+    Route::put('/update/avatar/{id}', [UserController::class, 'updateAvatar'])->middleware(['auth:api', 'scope:claudino']);
+    Route::put('/edit/password/{id}', [UserController::class, 'editPassword'])->middleware(['auth:api', 'scope:claudino']);
+    Route::put('/edit/email/{id}', [UserController::class, 'editEmail'])->middleware(['auth:api', 'scope:claudino']);
+    Route::put('/edit/modestyle/{id}', [UserController::class, 'editmodestyle'])->middleware(['auth:api', 'scope:claudino']);
 
     //Usuário - retorna dados do usuário logado
     Route::get('/user/logged/data', [UserController::class, 'userLoggedData'])->middleware(['auth:api', 'scope:claudino']);
 
     //Usuário - retorna dados e permissões
     Route::get('/user/permissoes/settings/{searchSubmodulo}', [UserController::class, 'userPermissoesSettings'])->middleware(['auth:api', 'scope:claudino']);
-    //Route::get('/user/permissoes/settings/{searchSubmodulo}', [UserController::class, 'userPermissoesSettings']);
 
     //Logout
     Route::post('logout', [UserController::class, 'logout'])->middleware(['auth:api', 'scope:claudino']);
@@ -32,8 +31,8 @@ Route::prefix('users')->group(function () {
 //Verifica se usuário existe (pelo email)
 Route::get('users/exist/{email}', [UserController::class, 'exist']);
 
-//Verifica se usuário foi confirmado (pelo email)
-Route::get('users/confirm/{email}', [UserController::class, 'confirm']);
+//Verificar Usuário que está tentando logar
+Route::get('users/confirm_user_login/{email}', [UserController::class, 'confirm_user_login']);
 
-//Alterar campo de confirmação de email (user_confirmed_at)
+//Alterar campo de confirmação de email (email_verified_at)
 Route::post('users/confirmupdate', [UserController::class, 'update_confirm']);

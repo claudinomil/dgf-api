@@ -113,6 +113,9 @@ class Transacoes
                     $dados .= $this->retornaDado(2, $dadosAnterior['situacao_id'], $dadosAtual['situacao_id'], 'Situação', Situacao::class, 'name');
                     $dados .= $this->retornaDado(1, $dadosAnterior['layout_mode'], $dadosAtual['layout_mode'], 'Layout Mode', '', '');
                     $dados .= $this->retornaDado(1, $dadosAnterior['layout_style'], $dadosAtual['layout_style'], 'Layout Style', '', '');
+                    $dados .= $this->retornaDado(1, $dadosAnterior['militar_rg'], $dadosAtual['militar_rg'], 'Militar RG', '', '');
+                    $dados .= $this->retornaDado(1, $dadosAnterior['militar_nome'], $dadosAtual['militar_nome'], 'Militar Nome', '', '');
+                    $dados .= $this->retornaDado(1, $dadosAnterior['militar_posto_graduacao'], $dadosAtual['militar_posto_graduacao'], 'Militar Posto/Graduação', '', '');
                 }
             }
 
@@ -121,6 +124,7 @@ class Transacoes
                 if ($op == 1) {
                     $dados .= '<b>:: Grupos</b>'.'<br><br>';
                     $dados .= $this->retornaDado(1, $dadosAnterior['name'], $dadosAtual['name'], 'Nome', '', '');
+                    $dados .= $this->retornaDado(1, $dadosAnterior['controle_transacao'], $dadosAtual['controle_transacao'], 'Controle Transação', '', '');
                 }
             }
 

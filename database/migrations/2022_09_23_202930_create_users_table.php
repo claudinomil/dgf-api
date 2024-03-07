@@ -6,25 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->foreignId('grupo_id')->nullable()->constrained('grupos');
+            $table->foreignId('situacao_id')->nullable()->constrained('situacoes');
+            $table->string('layout_mode')->nullable();
+            $table->string('layout_style')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->timestamp('user_confirmed_at')->nullable();
             $table->string('password');
             $table->text('avatar');
-            $table->string('layout_mode');
-            $table->string('layout_style');
-            $table->foreignId('grupo_id')->constrained('grupos');
-            $table->foreignId('situacao_id')->default(2)->constrained('situacoes');
 
             //Militar de referência para o Usuário
             $table->string('militar_rg')->nullable();
@@ -37,11 +31,6 @@ class CreateUsersTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('users');

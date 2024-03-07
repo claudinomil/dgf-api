@@ -17,17 +17,17 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'avatar',
-        'layout_mode',
-        'layout_style',
         'grupo_id',
         'situacao_id',
+        'layout_mode',
+        'layout_style',
+        'email_verified_at',
+        'password',
+        'avatar',
         'militar_rg',
         'militar_nome',
         'militar_posto_graduacao',
-        'militar_posto_graduacao_ordem',
-        'user_confirmed_at'
+        'militar_posto_graduacao_ordem'
     ];
 
     protected $hidden = [
@@ -39,7 +39,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function setNameAttribute($value) {$this->attributes['name'] = mb_strtoupper($value);}
-    public function setEmailAttribute($value) {$this->attributes['email'] = mb_strtolower($value);}
-    public function setAvatarAttribute($value) {$this->attributes['avatar'] = mb_strtolower($value);}
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = mb_strtoupper($value);
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = mb_strtolower($value);
+    }
+
+    public function setAvatarAttribute($value)
+    {
+        $this->attributes['avatar'] = mb_strtolower($value);
+    }
 }

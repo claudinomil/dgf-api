@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\API\ApiReturn;
+use App\Facades\SuporteFacade;
 use App\Http\Requests\GrupoStoreRequest;
 use App\Http\Requests\GrupoUpdateRequest;
 use App\Models\Dashboard;
@@ -14,6 +15,7 @@ use App\Models\Permissao;
 use App\Models\Submodulo;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grupo;
+use Illuminate\Support\Str;
 
 class GrupoController extends Controller
 {
@@ -44,8 +46,8 @@ class GrupoController extends Controller
                 $submodulo_name = $submodulo->name;
 
                 //Buscando Permissoes
-                $dados = DB::table('grupos_permissoes')
-                    ->join('grupos', 'grupos.id', '=', 'grupos_permissoes.grupo_id')
+                $dados = GrupoPermissao
+                    ::join('grupos', 'grupos.id', '=', 'grupos_permissoes.grupo_id')
                     ->leftJoin('permissoes', 'permissoes.id', '=', 'grupos_permissoes.permissao_id')
                     ->select(['permissoes.name as permissaoName'])
                     ->where('grupos_permissoes.grupo_id', $grupo_id)
@@ -56,7 +58,7 @@ class GrupoController extends Controller
                 $permissoesSubmodulo .= "<b class='pb-3'>".$submodulo_name."</b>";
 
                 $ctrl = 0;
-                foreach ($dados as $key => $dado) {
+                foreach ($dados as $dado) {
                     $ctrl++;
 
                     $p = explode('_', $dado->permissaoName);
@@ -93,8 +95,8 @@ class GrupoController extends Controller
     {
         try {
             //Buscando registro (Vem com Permissoes)
-            $dados = DB::table('grupos')
-                ->leftJoin('grupos_permissoes', 'grupos_permissoes.grupo_id', '=', 'grupos.id')
+            $dados = Grupo
+                ::leftJoin('grupos_permissoes', 'grupos_permissoes.grupo_id', '=', 'grupos.id')
                 ->leftJoin('permissoes', 'permissoes.id', '=', 'grupos_permissoes.permissao_id')
                 ->select(['grupos.*', 'permissoes.name as permissaoName'])
                 ->where('grupos.id', $id)
@@ -160,6 +162,10 @@ class GrupoController extends Controller
     public function store(GrupoStoreRequest $request)
     {
         try {
+            //Alterar campo controle_transacao
+            $controle_transacao = date('YmdHis') . Str::random(20);
+            $request['controle_transacao'] = $controle_transacao;
+
             //Incluindo registro na tabela grupos
             $grupo = $this->grupo->create($request->all());
             $grupo_id = $grupo['id'];
@@ -221,6 +227,9 @@ class GrupoController extends Controller
                 }
             }
 
+            //gravarTransacaoGrupo
+            SuporteFacade::gravarTransacaoGrupo($grupo_id, $controle_transacao);
+
             return response()->json(ApiReturn::data('Registro criado com sucesso.', 2010, null, null), 201);
         } catch (\Exception $e) {
             if (config('app.debug')) {
@@ -239,6 +248,10 @@ class GrupoController extends Controller
             if (!$registro) {
                 return response()->json(ApiReturn::data('Registro não encontrado.', 4040, '', $registro), 404);
             } else {
+                //Alterar campo controle_transacao
+                $controle_transacao = date('YmdHis') . Str::random(20);
+                $request['controle_transacao'] = $controle_transacao;
+
                 //Alterando registro na tabela grupos
                 $registro->update($request->all());
 
@@ -310,6 +323,9 @@ class GrupoController extends Controller
                     }
                 }
 
+                //gravarTransacaoGrupo
+                SuporteFacade::gravarTransacaoGrupo($grupo_id, $controle_transacao);
+
                 return response()->json(ApiReturn::data('Registro atualizado com sucesso.', 2000, null, $registro), 200);
             }
         } catch (\Exception $e) {
@@ -331,9 +347,7 @@ class GrupoController extends Controller
             } else {
                 //Verificar Relacionamentos'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                 //Tabela Users
-                $qtd = DB::table('users')->where('grupo_id', $id)->count();
-
-                if ($qtd > 0) {
+                if (SuporteFacade::verificarRelacionamento('users', 'grupo_id', $id) > 0) {
                     return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado em Usuários.', 2040, null, null), 200);
                 }
                 //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -432,8 +446,8 @@ class GrupoController extends Controller
                 $submodulo_name = $submodulo->name;
 
                 //Buscando Permissoes
-                $dados = DB::table('grupos_permissoes')
-                    ->leftJoin('permissoes', 'permissoes.id', '=', 'grupos_permissoes.permissao_id')
+                $dados = GrupoPermissao
+                    ::leftJoin('permissoes', 'permissoes.id', '=', 'grupos_permissoes.permissao_id')
                     ->select(['permissoes.name as permissaoName'])
                     ->where('grupos_permissoes.grupo_id', $grupo_id)
                     ->where('permissoes.submodulo_id', $submodulo_id)
