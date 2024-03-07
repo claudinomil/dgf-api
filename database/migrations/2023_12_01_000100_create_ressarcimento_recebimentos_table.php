@@ -11,7 +11,7 @@ class CreateRessarcimentoRecebimentosTable extends Migration
         Schema::create('ressarcimento_recebimentos', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('ressarcimento_cobranca_dado_id')->constrained('ressarcimento_cobrancas_dados', 'id', 'ressarcimento_recebimentos.cobranca_dado_id');
+            $table->foreignId('ressarcimento_cobranca_dado_id')->constrained('ressarcimento_cobrancas_dados', 'id', 'rr_cobranca_dado_id');
 
             $table->date('data_recebimento')->nullable();
             $table->float('valor_recebido', 10, 2)->nullable();

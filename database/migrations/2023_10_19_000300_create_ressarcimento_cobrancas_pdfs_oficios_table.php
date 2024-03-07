@@ -11,7 +11,7 @@ class CreateRessarcimentoCobrancasPdfsOficiosTable extends Migration
         Schema::create('ressarcimento_cobrancas_pdfs_oficios', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('ressarcimento_orgao_id')->constrained('ressarcimento_orgaos', 'id', 'ressarcimento_cobrancas_pdfs_oficios.orgao_id');
+            $table->foreignId('ressarcimento_orgao_id')->constrained('ressarcimento_orgaos', 'id', 'rcpo_orgao_id');
 
             $table->string('referencia')->nullable();
             $table->string('referencia_ano')->nullable();

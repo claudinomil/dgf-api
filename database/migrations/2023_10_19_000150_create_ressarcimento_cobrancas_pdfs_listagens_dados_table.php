@@ -11,7 +11,7 @@ class CreateRessarcimentoCobrancasPdfsListagensDadosTable extends Migration
         Schema::create('ressarcimento_cobrancas_pdfs_listagens_dados', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('ressarcimento_cobranca_pdf_listagem_id')->constrained('ressarcimento_cobrancas_pdfs_listagens', 'id', 'ressarcimento_cobrancas_pdfs_listagens_dados.list_id');
+            $table->foreignId('ressarcimento_cobranca_pdf_listagem_id')->constrained('ressarcimento_cobrancas_pdfs_listagens', 'id', 'rcpld_listagem_id');
 
             $table->string('militar_identidade_funcional')->nullable();
             $table->string('militar_posto_graduacao')->nullable();
