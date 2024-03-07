@@ -12,10 +12,10 @@ class CreateRessarcimentoCobrancasDadosTable extends Migration
             $table->id();
 
             //Campos de referência em outras tabelas
-            $table->foreignId('ressarcimento_referencia_id')->constrained('ressarcimento_referencias', 'id', 'referencia_id');
-            $table->foreignId('ressarcimento_orgao_id')->constrained('ressarcimento_orgaos', 'id', 'orgao_id');
-            $table->foreignId('ressarcimento_militar_id')->constrained('ressarcimento_militares', 'id', 'militar_id');
-            $table->foreignId('ressarcimento_pagamento_id')->constrained('ressarcimento_pagamentos', 'id', 'pagamento_id');
+            $table->foreignId('ressarcimento_referencia_id')->constrained('ressarcimento_referencias', 'id', 'rcd_referencia_id');
+            $table->foreignId('ressarcimento_orgao_id')->constrained('ressarcimento_orgaos', 'id', 'rcd_orgao_id');
+            $table->foreignId('ressarcimento_militar_id')->constrained('ressarcimento_militares', 'id', 'rcd_militar_id');
+            $table->foreignId('ressarcimento_pagamento_id')->constrained('ressarcimento_pagamentos', 'id', 'rcd_pagamento_id');
 
             //Dados da Referência (ressarcimento_referencias)
             $table->string('referencia')->nullable();
