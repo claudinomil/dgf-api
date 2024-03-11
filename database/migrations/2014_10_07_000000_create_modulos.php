@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('modulos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('setor_id')->nullable()->constrained('setores');
             $table->string('name')->unique();
             $table->string('menu_text')->unique();
             $table->string('menu_url')->unique();

@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Modulo extends Model
+class Setor extends Model
 {
     use HasFactory;
 
-    protected $table = 'modulos';
+    protected $table = 'setores';
 
     protected $fillable = [
-        'setor_id',
         'name',
-        'menu_text',
-        'menu_url',
-        'menu_route',
         'menu_icon',
-        'viewing_order'
+        'ordem_visualizacao'
     ];
 }

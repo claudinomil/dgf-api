@@ -9,6 +9,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            SetoresSeeder::class,
             ModulosSeeder::class,
             SubmodulosSeeder::class,
             DashboardsSeeder::class,
@@ -21,7 +22,7 @@ class DatabaseSeeder extends Seeder
             GrupoRelatoriosSeeder::class,
             SituacoesSeeder::class,
             OperacoesSeeder::class,
-            UsersSeeder::class,
+            UserSeeder::class,
             EsferasSeeder::class,
             FuncoesSeeder::class,
             PoderesSeeder::class,

@@ -20,7 +20,7 @@ class RelatoriosSeeder extends Seeder
         Relatorio::create(['id' => 6, 'modulo_id' => 3, 'name' => 'Militares por Referência e Órgão(s)', 'descricao' => '', 'ordem_visualizacao' => 1]);
         Relatorio::create(['id' => 7, 'modulo_id' => 3, 'name' => 'Ressarcimento por Referência e Órgão(s)', 'descricao' => '', 'ordem_visualizacao' => 2]);
         Relatorio::create(['id' => 8, 'modulo_id' => 3, 'name' => 'Dívidas do(s) Órgão(s)', 'descricao' => '', 'ordem_visualizacao' => 3]);
-        Relatorio::create(['id' => 9, 'modulo_id' => 3, 'name' => 'Ressarcimento Relatório 4', 'descricao' => 'Descrição Ressarcimento Relatório 4', 'ordem_visualizacao' => 4]);
-        Relatorio::create(['id' => 10, 'modulo_id' => 3, 'name' => 'Ressarcimento Relatório 5', 'descricao' => 'Descrição Ressarcimento Relatório 5', 'ordem_visualizacao' => 5]);
+        Relatorio::create(['id' => 9, 'modulo_id' => 3, 'name' => 'Ressarcimento Relatório 4', 'descricao' => '', 'ordem_visualizacao' => 4]);
+        Relatorio::create(['id' => 10, 'modulo_id' => 3, 'name' => 'Ressarcimento Relatório 5', 'descricao' => '', 'ordem_visualizacao' => 5]);
     }
 }

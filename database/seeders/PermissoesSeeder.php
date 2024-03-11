@@ -96,12 +96,6 @@ class PermissoesSeeder extends Seeder
         //Permissao::create(['id' => 71, 'submodulo_id' => 15, 'name' => 'ressarcimento_relatorios_edit', 'description' => 'Editar Registro - Ressarcimento Relatórios']);
         //Permissao::create(['id' => 72, 'submodulo_id' => 15, 'name' => 'ressarcimento_relatorios_destroy', 'description' => 'Deletar Registro - Ressarcimento Relatórios']);
 
-        Permissao::create(['id' => 73, 'submodulo_id' => 16, 'name' => 'ressarcimento_dashboards_list', 'description' => 'Visualizar Registro - Ressarcimento Dashboards']);
-        //Permissao::create(['id' => 74, 'submodulo_id' => 16, 'name' => 'ressarcimento_dashboards_create', 'description' => 'Criar Registro - Ressarcimento Dashboards']);
-        //Permissao::create(['id' => 75, 'submodulo_id' => 16, 'name' => 'ressarcimento_dashboards_show', 'description' => 'Visualizar Registro - Ressarcimento Dashboards']);
-        //Permissao::create(['id' => 76, 'submodulo_id' => 16, 'name' => 'ressarcimento_dashboards_edit', 'description' => 'Editar Registro - Ressarcimento Dashboards']);
-        //Permissao::create(['id' => 77, 'submodulo_id' => 16, 'name' => 'ressarcimento_dashboards_destroy', 'description' => 'Deletar Registro - Ressarcimento Dashboards']);
-
         Permissao::create(['id' => 78, 'submodulo_id' => 17, 'name' => 'relatorios_list', 'description' => 'Visualizar Registro - Relatórios']);
         //Permissao::create(['id' => 79, 'submodulo_id' => 17, 'name' => 'relatorios_create', 'description' => 'Criar Registro - Relatórios']);
         //Permissao::create(['id' => 80, 'submodulo_id' => 17, 'name' => 'relatorios_show', 'description' => 'Visualizar Registro - Relatórios']);

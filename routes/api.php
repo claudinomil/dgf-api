@@ -59,9 +59,6 @@ require __DIR__ . '/routes_ressarcimento_recebimentos.php';
 //Ressarcimento Relatorios
 require __DIR__ . '/routes_ressarcimento_relatorios.php';
 
-//Ressarcimento Dashboards
-require __DIR__ . '/routes_ressarcimento_dashboards.php';
-
 //Efetivo Militares
 require __DIR__ . '/routes_efetivo_militares.php';
 

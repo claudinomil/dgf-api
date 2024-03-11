@@ -18,6 +18,7 @@ use App\Models\Notificacao;
 use App\Models\NotificacaoLida;
 use App\Models\Situacao;
 use App\Models\Submodulo;
+use App\Models\UserDashboardViews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -425,22 +426,16 @@ class UserController extends Controller
                     ->where('grupos_permissoes.grupo_id', Auth::user()->grupo_id)
                     ->get();
 
-                //dashboards
-                $registros['userDashboards'] = GrupoDashboard
-                    ::join('dashboards', 'dashboards.id', '=', 'grupos_dashboards.dashboard_id')
-                    ->select('dashboards.*')
-                    ->where('grupos_dashboards.grupo_id', Auth::user()->grupo_id)
-                    ->get();
-
-                //relatorios
-                $registros['userRelatorios'] = GrupoRelatorio
-                    ::join('relatorios', 'relatorios.id', '=', 'grupos_relatorios.relatorio_id')
-                    ->select('relatorios.*')
-                    ->where('grupos_relatorios.grupo_id', Auth::user()->grupo_id)
-                    ->get();
-
                 //Menu Módulos
-                $registros['menuModulos'] = Modulo::where('viewing_order', '>', '0')->orderBy('viewing_order', 'asc')->orderBy('name', 'asc')->get();
+                //$registros['menuModulos'] = Modulo::where('viewing_order', '>', '0')->orderBy('viewing_order', 'asc')->orderBy('name', 'asc')->get();
+                $registros['menuModulos'] = Modulo
+                    ::leftjoin('setores', 'setores.id', 'modulos.setor_id')
+                    ->select('modulos.*', 'setores.name as setor_name', 'setores.menu_icon as setor_menu_icon')
+                    ->where('viewing_order', '>', '0')
+                    ->orderBy('setores.ordem_visualizacao', 'asc')
+                    ->orderBy('modulos.viewing_order', 'asc')
+                    ->orderBy('modulos.name', 'asc')
+                    ->get();
 
                 //Menu Submódulos
                 $registros['menuSubmodulos'] = Submodulo

@@ -144,10 +144,10 @@ class GrupoController extends Controller
             $registros['permissoes'] = Permissao::all();
 
             //Dashboards
-            $registros['dashboards'] = Dashboard::all();
+            $registros['dashboards'] = Dashboard::select('dashboards.*', 'modulos.name as modulo_name')->join('modulos', 'modulos.id', 'dashboards.modulo_id')->orderby('modulo_id')->orderby('ordem_visualizacao')->get();
 
             //Relatorios
-            $registros['relatorios'] = Relatorio::all();
+            $registros['relatorios'] = Relatorio::select('relatorios.*', 'modulos.name as modulo_name')->join('modulos', 'modulos.id', 'relatorios.modulo_id')->orderby('modulo_id')->orderby('ordem_visualizacao')->get();
 
             return response()->json(ApiReturn::data('Registro enviado com sucesso.', 2000, null, $registros), 200);
         } catch (\Exception $e) {
