@@ -10,8 +10,13 @@ class WebserviceController extends Controller
     public function militar($field, $value)
     {
         try {
-            //WebService SAC - DGF
-            $registro = SuporteFacade::webserviceSacDgf(1, $field, $value);
+            //WebService - DGF
+            $parametros = array();
+            $parametros['evento'] = 1;
+            $parametros['field'] = $field;
+            $parametros['value'] = $value;
+
+            $registro = SuporteFacade::webserviceDgf($parametros);
 
             //Registro recebido com sucesso
             if (isset($registro['success'])) {

@@ -30,7 +30,7 @@ class FerramentaUpdateRequest extends FormRequest
             'url' => ['required'],
             'icon' => ['required'],
             'user_id' => ['required'],
-            'viewing_order' => ['required']
+            'ordem_visualizacao' => ['required']
         ];
     }
 
@@ -42,7 +42,7 @@ class FerramentaUpdateRequest extends FormRequest
             'url.required' => 'A URL é requerido.',
             'icon.required' => 'O Ícone é requerido.',
             'user_id.required' => 'O Usuário é requerido.',
-            'viewing_order.required' => 'A Ordem Visualização é obrigatório'
+            'ordem_visualizacao.required' => 'A Ordem Visualização é obrigatório'
         ];
     }
 }

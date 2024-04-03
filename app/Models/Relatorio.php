@@ -12,7 +12,7 @@ class Relatorio extends Model
     protected $table = 'relatorios';
 
     protected $fillable = [
-        'modulo_id',
+        'agrupamento_id',
         'name',
         'descricao',
         'ordem_visualizacao'

@@ -12,9 +12,10 @@ class Dashboard extends Model
     protected $table = 'dashboards';
 
     protected $fillable = [
-        'modulo_id',
+        'agrupamento_id',
         'name',
         'descricao',
+        'largura',
         'ordem_visualizacao'
     ];
 }

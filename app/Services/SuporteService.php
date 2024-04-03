@@ -412,28 +412,51 @@ class SuporteService
     }
 
     /*
-     * WebService SAC - DGF
-     * Banco de Dados de origem: cbmerj
+     * WebService - DGF
      */
-    public function webserviceSacDgf($evento, $field, $valor, $limit=500, $selectWhere='') {
+    public function webserviceDgf($parametros) {
+        //Parâmetros
+        if (isset($parametros['evento'])) {$evento = $parametros['evento'];} else {$evento = 0;}
+        if (isset($parametros['field'])) {$field = $parametros['field'];} else {$field = '';}
+        if (isset($parametros['value'])) {$value = $parametros['value'];} else {$value = '';}
+        if (isset($parametros['limit'])) {$limit = $parametros['limit'];} else {$limit = 500;}
+        if (isset($parametros['selectWhere'])) {$selectWhere = $parametros['selectWhere'];} else {$selectWhere = '';}
+        if (isset($parametros['data1'])) {$data1 = $parametros['data1'];} else {$data1 = '';}
+        if (isset($parametros['data2'])) {$data2 = $parametros['data2'];} else {$data2 = '';}
+        if (isset($parametros['subconta_id'])) {$subconta_id = $parametros['subconta_id'];} else {$subconta_id = 0;}
+
+        //Response
         $response = Http::get("http://dgf.rj.gov.br/sites/sistema/service_sistema_dgf.php", [
             'token' => 'hg4t@hb%gfdRRR$$$hk999R@@@hvfCLAU',
             'evento' => $evento,
             'field' => $field,
-            'value' => $valor,
+            'value' => $value,
             'limit' => $limit,
-            'selectWhere' => $selectWhere
+            'selectWhere' => $selectWhere,
+            'data1' => $data1,
+            'data2' => $data2,
+            'subconta_id' => $subconta_id
         ]);
-
         return $response;
     }
 
     /*
      * Formatar RG
+     * @PARAM op=0 : limpar RG (retira barra, ponto e zeros a esquerda)
      * @PARAM op=1 : recebe 00/0027.335 e retorna 27335
      * @PARAM op=2 : recebe 27335 e retorna 00/0027.335
+     * @PARAM op=3 : recebe 27.335 e retorna 27335
+     * @PARAM op=4 : recebe 27335 e retorna 27.335
      */
     public function getRG($op, $rg) {
+        if ($op == 0) {
+            $rg = str_replace('/', '', $rg);
+            $rg = str_replace('.', '', $rg);
+            $rg = str_replace(' ', '', $rg);
+            $rg = trim($rg);
+            $rg = intval($rg);
+        }
+
         if ($op == 1) {
             $rg = str_replace('/', '', $rg);
             $rg = str_replace('.', '', $rg);
@@ -455,6 +478,20 @@ class SuporteService
             if (strlen($rg) == 3) {$rg = '00/'.'0000.' . $rg;}
             if (strlen($rg) == 2) {$rg = '00/'.'0000.0' . $rg;}
             if (strlen($rg) == 1) {$rg = '00/'.'0000.00' . $rg;}
+        }
+
+        if ($op == 3) {
+            $rg = str_replace('.', '', $rg);
+        }
+
+        if ($op == 4) {
+            if (strlen($rg) == 7) {$rg = substr($rg, 0, 4) . '.' . substr($rg, 4, 3);}
+            if (strlen($rg) == 6) {$rg = substr($rg, 0, 3) . '.' . substr($rg, 3, 3);}
+            if (strlen($rg) == 5) {$rg = substr($rg, 0, 2) . '.' . substr($rg, 2, 3);}
+            if (strlen($rg) == 4) {$rg = substr($rg, 0, 1) . '.' . substr($rg, 1, 3);}
+            if (strlen($rg) == 3) {$rg = $rg;}
+            if (strlen($rg) == 2) {$rg = $rg;}
+            if (strlen($rg) == 1) {$rg = $rg;}
         }
 
         return $rg;

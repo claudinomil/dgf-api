@@ -13,6 +13,6 @@ class Vocativo extends Model
 
     protected $fillable = [
         'name',
-        'viewing_order'
+        'ordem_visualizacao'
     ];
 }

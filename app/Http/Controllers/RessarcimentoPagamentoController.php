@@ -211,87 +211,95 @@ class RessarcimentoPagamentoController extends Controller
 
     public function importar(Request $request)
     {
-        //Verificar Lógica''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        //Não deixar importar se Cobrança da Referência estiver fechada
-        $cobrancaFechada = DB::table('ressarcimento_cobrancas')->where('cobranca_encerrada', 1)->where('referencia', $request['referencia'])->count();
+        try {
+            //Verificar Lógica''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            //Não deixar importar se Cobrança da Referência estiver fechada
+            $cobrancaFechada = DB::table('ressarcimento_cobrancas')->where('cobranca_encerrada', 1)->where('referencia', $request['referencia'])->count();
 
-        if ($cobrancaFechada == 1) {
-            return response()->json(ApiReturn::data('Náo é possível importar. Cobrança fechada para a referência: '.SuporteFacade::getReferencia(1, $request['referencia']), 2040, null, null), 200);
-        }
-        //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-        //Array com Dados para inclusão
-        $registro = array();
-
-        $registro['ressarcimento_militar_id'] = utf8_decode($request['ressarcimento_militar_id']);
-        $registro['referencia'] = utf8_decode($request['referencia']);
-        $registro['identidade_funcional'] = utf8_decode(str_pad($request['identidade_funcional'], 10, '0', STR_PAD_LEFT));
-        $registro['vinculo'] = utf8_decode($request['vinculo']);
-        $registro['rg'] = utf8_decode($request['rg']);
-        $registro['codigo_cargo'] = utf8_decode($request['codigo_cargo']);
-        $registro['nome_cargo'] = utf8_decode($request['nome_cargo']);
-        $registro['posto_graduacao'] = utf8_decode($request['posto_graduacao']);
-        $registro['nivel'] = utf8_decode($request['nivel']);
-        $registro['nome'] = utf8_decode($request['nome']);
-        $registro['situacao_pagamento'] = utf8_decode($request['situacao_pagamento']);
-        $registro['data_ingresso'] = utf8_decode($request['data_ingresso']);
-        $registro['data_nascimento'] = utf8_decode($request['data_nascimento']);
-        $registro['data_aposentadoria'] = utf8_decode($request['data_aposentadoria']);
-        $registro['genero'] = utf8_decode($request['genero']);
-        $registro['codigo_ua'] = utf8_decode($request['codigo_ua']);
-        $registro['ua'] = $request['ua'];
-        $registro['cpf'] = utf8_decode($request['cpf']);
-        $registro['pasep'] = utf8_decode($request['pasep']);
-        $registro['banco'] = utf8_decode($request['banco']);
-        $registro['agencia'] = utf8_decode($request['agencia']);
-        $registro['conta_corrente'] = utf8_decode($request['conta_corrente']);
-        $registro['numero_dependentes'] = utf8_decode($request['numero_dependentes']);
-        $registro['ir_dependente'] = utf8_decode($request['ir_dependente']);
-        $registro['cotista'] = utf8_decode($request['cotista']);
-        $registro['bruto'] = utf8_decode($request['bruto']);
-        $registro['desconto'] = utf8_decode($request['desconto']);
-        $registro['liquido'] = utf8_decode($request['liquido']);
-        $registro['soldo'] = utf8_decode($request['soldo']);
-        $registro['hospital10'] = utf8_decode($request['hospital10']);
-        $registro['rioprevidencia22'] = utf8_decode($request['rioprevidencia22']);
-        $registro['etapa_ferias'] = utf8_decode($request['etapa_ferias']);
-        $registro['etapa_destacado'] = utf8_decode($request['etapa_destacado']);
-        $registro['ajuda_fardamento'] = utf8_decode($request['ajuda_fardamento']);
-        $registro['habilitacao_profissional'] = utf8_decode($request['habilitacao_profissional']);
-        $registro['gret'] = utf8_decode($request['gret']);
-        $registro['auxilio_moradia'] = utf8_decode($request['auxilio_moradia']);
-        $registro['gpe'] = utf8_decode($request['gpe']);
-        $registro['gee_capacitacao'] = utf8_decode($request['gee_capacitacao']);
-        $registro['decreto14407'] = utf8_decode($request['decreto14407']);
-        $registro['ferias'] = utf8_decode($request['ferias']);
-        $registro['raio_x'] = utf8_decode($request['raio_x']);
-        $registro['trienio'] = utf8_decode($request['trienio']);
-        $registro['auxilio_invalidez'] = utf8_decode($request['auxilio_invalidez']);
-        $registro['tempo_certo'] = utf8_decode($request['tempo_certo']);
-        $registro['fundo_saude'] = utf8_decode($request['fundo_saude']);
-        $registro['abono_permanencia'] = utf8_decode($request['abono_permanencia']);
-        $registro['deducao_ir'] = utf8_decode($request['deducao_ir']);
-        $registro['ir_valor'] = utf8_decode($request['ir_valor']);
-        $registro['auxilio_transporte'] = utf8_decode($request['auxilio_transporte']);
-        $registro['gram'] = utf8_decode($request['gram']);
-        $registro['auxilio_fardamento'] = utf8_decode($request['auxilio_fardamento']);
-        $registro['cidade'] = utf8_decode($request['cidade']);
-
-        //Verificar se já foi importado
-        $ja_importado = RessarcimentoPagamento::where('referencia', $registro['referencia'])->where('identidade_funcional', $registro['identidade_funcional'])->count();
-
-        //Se não foi importado
-        if ($ja_importado == 0) {
-            //Incluindo registro
-            $response = $this->ressarcimento_pagamento->create($registro);
-
-            if ($response) {
-                return response()->json(ApiReturn::data('Registro incluído com sucesso.', 2000, null, null), 200);
-            } else {
-                return response()->json(ApiReturn::data($registro['nome'], 2005, null, null), 200);
+            if ($cobrancaFechada == 1) {
+                return response()->json(ApiReturn::data('Náo é possível importar. Cobrança fechada para a referência: '.SuporteFacade::getReferencia(1, $request['referencia']), 2040, null, null), 200);
             }
-        } else {
-            return response()->json(ApiReturn::data($registro['nome'], 2006, null, null), 200);
+            //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+            //Array com Dados para inclusão
+            $registro = array();
+
+            $registro['ressarcimento_militar_id'] = utf8_decode($request['ressarcimento_militar_id']);
+            $registro['referencia'] = utf8_decode($request['referencia']);
+            $registro['identidade_funcional'] = utf8_decode(str_pad($request['identidade_funcional'], 10, '0', STR_PAD_LEFT));
+            $registro['vinculo'] = utf8_decode($request['vinculo']);
+            $registro['rg'] = utf8_decode($request['rg']);
+            $registro['codigo_cargo'] = utf8_decode($request['codigo_cargo']);
+            $registro['nome_cargo'] = utf8_decode($request['nome_cargo']);
+            $registro['posto_graduacao'] = utf8_decode($request['posto_graduacao']);
+            $registro['nivel'] = utf8_decode($request['nivel']);
+            $registro['nome'] = utf8_decode($request['nome']);
+            $registro['situacao_pagamento'] = utf8_decode($request['situacao_pagamento']);
+            $registro['data_ingresso'] = utf8_decode($request['data_ingresso']);
+            $registro['data_nascimento'] = utf8_decode($request['data_nascimento']);
+            $registro['data_aposentadoria'] = utf8_decode($request['data_aposentadoria']);
+            $registro['genero'] = utf8_decode($request['genero']);
+            $registro['codigo_ua'] = utf8_decode($request['codigo_ua']);
+            $registro['ua'] = $request['ua'];
+            $registro['cpf'] = utf8_decode($request['cpf']);
+            $registro['pasep'] = utf8_decode($request['pasep']);
+            $registro['banco'] = utf8_decode($request['banco']);
+            $registro['agencia'] = utf8_decode($request['agencia']);
+            $registro['conta_corrente'] = utf8_decode($request['conta_corrente']);
+            $registro['numero_dependentes'] = utf8_decode($request['numero_dependentes']);
+            $registro['ir_dependente'] = utf8_decode($request['ir_dependente']);
+            $registro['cotista'] = utf8_decode($request['cotista']);
+            $registro['bruto'] = utf8_decode($request['bruto']);
+            $registro['desconto'] = utf8_decode($request['desconto']);
+            $registro['liquido'] = utf8_decode($request['liquido']);
+            $registro['soldo'] = utf8_decode($request['soldo']);
+            $registro['hospital10'] = utf8_decode($request['hospital10']);
+            $registro['rioprevidencia22'] = utf8_decode($request['rioprevidencia22']);
+            $registro['etapa_ferias'] = utf8_decode($request['etapa_ferias']);
+            $registro['etapa_destacado'] = utf8_decode($request['etapa_destacado']);
+            $registro['ajuda_fardamento'] = utf8_decode($request['ajuda_fardamento']);
+            $registro['habilitacao_profissional'] = utf8_decode($request['habilitacao_profissional']);
+            $registro['gret'] = utf8_decode($request['gret']);
+            $registro['auxilio_moradia'] = utf8_decode($request['auxilio_moradia']);
+            $registro['gpe'] = utf8_decode($request['gpe']);
+            $registro['gee_capacitacao'] = utf8_decode($request['gee_capacitacao']);
+            $registro['decreto14407'] = utf8_decode($request['decreto14407']);
+            $registro['ferias'] = utf8_decode($request['ferias']);
+            $registro['raio_x'] = utf8_decode($request['raio_x']);
+            $registro['trienio'] = utf8_decode($request['trienio']);
+            $registro['auxilio_invalidez'] = utf8_decode($request['auxilio_invalidez']);
+            $registro['tempo_certo'] = utf8_decode($request['tempo_certo']);
+            $registro['fundo_saude'] = utf8_decode($request['fundo_saude']);
+            $registro['abono_permanencia'] = utf8_decode($request['abono_permanencia']);
+            $registro['deducao_ir'] = utf8_decode($request['deducao_ir']);
+            $registro['ir_valor'] = utf8_decode($request['ir_valor']);
+            $registro['auxilio_transporte'] = utf8_decode($request['auxilio_transporte']);
+            $registro['gram'] = utf8_decode($request['gram']);
+            $registro['auxilio_fardamento'] = utf8_decode($request['auxilio_fardamento']);
+            $registro['cidade'] = utf8_decode($request['cidade']);
+
+            //Verificar se já foi importado
+            $ja_importado = RessarcimentoPagamento::where('referencia', $registro['referencia'])->where('identidade_funcional', $registro['identidade_funcional'])->count();
+
+            //Se não foi importado
+            if ($ja_importado == 0) {
+                //Incluindo registro
+                $response = $this->ressarcimento_pagamento->create($registro);
+
+                if ($response) {
+                    return response()->json(ApiReturn::data('Registro incluído com sucesso.', 2000, null, null), 200);
+                } else {
+                    return response()->json(ApiReturn::data($registro['nome'], 2005, null, null), 200);
+                }
+            } else {
+                return response()->json(ApiReturn::data($registro['nome'], 2006, null, null), 200);
+            }
+        } catch (\Exception $e) {
+            if (config('app.debug')) {
+                return response()->json(ApiReturn::data($registro['nome'].'<br>'.$e->getMessage(), 2005, null, null), 200);
+            }
+
+            return response()->json(ApiReturn::data($registro['nome'], 2005, null, null), 200);
         }
     }
 

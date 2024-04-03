@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\API\ApiReturn;
 use App\Facades\SuporteFacade;
+use App\Models\Agrupamento;
+use App\Models\Dashboard;
 use App\Models\Esfera;
 use App\Models\Grupo;
 use App\Models\GrupoDashboard;
@@ -27,49 +29,21 @@ class DashboardController extends Controller
         //Retorno
         $content = array();
 
-        //Ressarcimento Informações - Início''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        //Ressarcimento Informações - Início''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        //Agrupamentos
+        $content['agrupamentos'] = Agrupamento::orderby('ordem_visualizacao', 'ASC')->get();
 
-        //Variaveis
-        $primeira_referencia = '';
-        $ultima_referencia = '';
-
-        //Periodos
-        $periodo1 = '';
-        $periodo2 = '';
-
-        //Referências
-        $referencias = RessarcimentoReferencia::select('referencia')->orderby('referencia', 'DESC')->get();
-
-        $reg = 1;
-        foreach ($referencias as $referencia) {
-            //Pegando primeira referência
-            $primeira_referencia = $referencia['referencia'];
-
-            //Pegando Última referência para servir como referência e periodo 2 para os Gráficos
-            if ($reg == 1) {
-                $ultima_referencia = $referencia['referencia'];
-                $periodo2 = $referencia['referencia'];
-            }
-
-            //Pegando referência de 6 meses ou 6 ressarcimentos para trás
-            if ($reg == 6) {
-                $periodo1 = $referencia['referencia'];
-            }
-
-            $reg++;
-        }
-
-        if ($periodo1 == '') {$periodo1 = $primeira_referencia;}
-        if ($periodo2 == '') {$periodo2 = $ultima_referencia;}
-
-        //Retorno
-        $content['ressarcimento_periodo1'] = $periodo1;
-        $content['ressarcimento_periodo2'] = $periodo2;
+        //Retorno dashboards_modal_filtro_1
         $content['ressarcimento_referencias'] = RessarcimentoReferencia::select('referencia')->orderby('referencia', 'DESC')->get();
         $content['ressarcimento_orgaos'] = RessarcimentoOrgao::select('id', 'name')->orderby('name', 'ASC')->get();
-        //Ressarcimento Informações - Fim'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        //Ressarcimento Informações - Fim'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+        //Retorno dashboards_modal_filtro_2
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 3;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
+
+        $content['subcontas'] = $registros['success'];
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $content), 200);
     }
@@ -79,81 +53,65 @@ class DashboardController extends Controller
         //Array
         $dados = array();
 
-        $dados['gruposQtd'] = Grupo::all()->count();
-        $dados['usuariosQtd'] = User::all()->count();
-        $dados['transacoesQtd'] = Transacao::all()->count();
+        $dados['quantidade_grupos'] = Grupo::all()->count();
+        $dados['quantidade_usuarios'] = User::all()->count();
+        $dados['quantidade_transacoes'] = Transacao::all()->count();
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard2()
     {
-        //Array de retorno
+        //Arrays de retorno
         $dados = array();
-
-        //Series
-        $series = array();
-
-        $yaxis_max = 0;
+        $series_data = array();
+        $xaxis_categories = array();
 
         $grupos = Grupo::all();
+
         foreach ($grupos as $grupo) {
             $usuariosQtd = User::where('grupo_id', $grupo['id'])->count();
-            $series[] = ['name' => $grupo['name'], 'data' => [$usuariosQtd]];
-
-            if ($usuariosQtd > $yaxis_max) {$yaxis_max = $usuariosQtd;}
+            $series_data[] = $usuariosQtd;
+            $xaxis_categories[] = $grupo['name'];
         }
-        $dados['series'] = $series;
 
-        //Usuários Qtd
-        $dados['usuariosQtd'] = User::all()->count();
-
-        //yaxis_max
-        $dados['yaxis_max'] = $yaxis_max;
+        //Retorno
+        $dados['quantidade_usuarios'] = User::all()->count();
+        $dados['series_data'] = $series_data;
+        $dados['xaxis_categories'] = $xaxis_categories;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard3()
     {
-        //Array de retorno
+        //Arrays de retorno
         $dados = array();
+        $series_data = array();
+        $xaxis_categories = array();
 
-        //Series
-        $series = array();
+        $postos_graduacoes = User::select('militar_posto_graduacao', 'militar_posto_graduacao_ordem')->distinct('militar_posto_graduacao')->orderby('militar_posto_graduacao_ordem')->get();
 
-        $yaxis_max = 0;
-
-        $usuarios = User::select('militar_posto_graduacao_ordem', 'militar_posto_graduacao', DB::raw('count(*) as total'))->groupby('militar_posto_graduacao_ordem', 'militar_posto_graduacao')->orderby('militar_posto_graduacao_ordem', 'ASC')->get();
-        foreach ($usuarios as $usuario) {
-            $usuariosQtd = $usuario['total'];
-
-            if ($usuario['militar_posto_graduacao'] == '') {$name = 'CIVIL';} else {$name = $usuario['militar_posto_graduacao'];}
-
-            $series[] = ['name' => $name, 'data' => [$usuariosQtd]];
-
-            if ($usuariosQtd > $yaxis_max) {$yaxis_max = $usuariosQtd;}
+        foreach ($postos_graduacoes as $posto_graduacao) {
+            $usuariosQtd = User::where('militar_posto_graduacao', $posto_graduacao['militar_posto_graduacao'])->count();
+            $series_data[] = $usuariosQtd;
+            $xaxis_categories[] = $posto_graduacao['militar_posto_graduacao'];
         }
-        $dados['series'] = $series;
 
-        //Usuários Qtd
-        $dados['usuariosQtd'] = User::all()->count();
-
-        //yaxis_max
-        $dados['yaxis_max'] = $yaxis_max;
+        //Retorno
+        $dados['quantidade_usuarios'] = User::all()->count();
+        $dados['series_data'] = $series_data;
+        $dados['xaxis_categories'] = $xaxis_categories;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard4()
     {
-        //Array de retorno
+        //Arrays de retorno
         $dados = array();
-
-        //Series
         $series = array();
-
-        $yaxis_max = 0;
+        $labels = array();
 
         $usuarios = User
             ::join('situacoes', 'situacoes.id', 'users.situacao_id')
@@ -162,32 +120,25 @@ class DashboardController extends Controller
             ->get();
         foreach ($usuarios as $usuario) {
             $usuariosQtd = $usuario['total'];
-            $name = $usuario['situacao'];
 
-            $series[] = ['name' => $name, 'data' => [$usuariosQtd]];
-
-            if ($usuariosQtd > $yaxis_max) {$yaxis_max = $usuariosQtd;}
+            $series[] = $usuariosQtd;
+            $labels[] = $usuario['situacao'];
         }
+
+        //Retorno
+        $dados['quantidade_usuarios'] = User::all()->count();
         $dados['series'] = $series;
-
-        //Usuários Qtd
-        $dados['usuariosQtd'] = User::all()->count();
-
-        //yaxis_max
-        $dados['yaxis_max'] = $yaxis_max;
+        $dados['labels'] = $labels;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard5()
     {
-        //Array de retorno
+        //Arrays de retorno
         $dados = array();
-
-        //Series
         $series = array();
-
-        $yaxis_max = 0;
+        $labels = array();
 
         $transacoes = Transacao
             ::join('operacoes', 'operacoes.id', 'transacoes.operacao_id')
@@ -196,30 +147,26 @@ class DashboardController extends Controller
             ->get();
         foreach ($transacoes as $transacao) {
             $transacoesQtd = $transacao['total'];
-            $name = $transacao['operacao'];
 
-            $series[] = ['name' => $name, 'data' => [$transacoesQtd]];
-
-            if ($transacoesQtd > $yaxis_max) {$yaxis_max = $transacoesQtd;}
+            $series[] = $transacoesQtd;
+            $labels[] = $name = $transacao['operacao'];
         }
+
+        //Retorno
+        $dados['quantidade_transacoes'] = Transacao::all()->count();
         $dados['series'] = $series;
-
-        //Transações Qtd
-        $dados['transacoesQtd'] = Transacao::all()->count();
-
-        //yaxis_max
-        $dados['yaxis_max'] = $yaxis_max;
+        $dados['labels'] = $labels;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard6($periodo1, $periodo2, $orgao_id)
     {
-        //Array
+        //Arrays de retorno
         $dados = array();
 
         //Registros Órgãos
-        $dados['orgaosQtd'] = RessarcimentoOrgao
+        $dados['quantidade_orgaos'] = RessarcimentoOrgao
             ::join('ressarcimento_militares', 'ressarcimento_militares.lotacao_id', 'ressarcimento_orgaos.lotacao_id')
             ->select('ressarcimento_orgaos.*')
             ->distinct('ressarcimento_orgaos.lotacao_id')
@@ -228,7 +175,7 @@ class DashboardController extends Controller
             ->count();
 
         //Registros Militares
-        $dados['militaresQtd'] = RessarcimentoMilitar
+        $dados['quantidade_militares'] = RessarcimentoMilitar
             ::where('referencia', '>=', $periodo1)
             ->where('referencia', '<=', $periodo2)
             ->count();
@@ -250,31 +197,31 @@ class DashboardController extends Controller
             $valor_ressarcimento += $valor['valor_ressarcimento'];
         }
 
-        $dados['valorRessarcimento'] = $valor_ressarcimento;
+        $dados['valor_ressarcimento'] = $valor_ressarcimento;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard7($periodo1, $periodo2, $orgao_id)
     {
-        //Array
+        //Arrays de retorno
         $dados = array();
 
         //Registros Militares
-        $dados['militaresQtd'] = RessarcimentoMilitar
+        $dados['quantidade_militares'] = RessarcimentoMilitar
             ::where('referencia', '>=', $periodo1)
             ->where('referencia', '<=', $periodo2)
             ->count();
 
         //Registros Oficiais
-        $dados['oficiaisQtd'] = RessarcimentoMilitar
+        $dados['quantidade_oficiais'] = RessarcimentoMilitar
             ::where('referencia', '>=', $periodo1)
             ->where('referencia', '<=', $periodo2)
             ->where('oficial_praca', 1)
             ->count();
 
         //Registros Praças
-        $dados['pracasQtd'] = RessarcimentoMilitar
+        $dados['quantidade_pracas'] = RessarcimentoMilitar
             ::where('referencia', '>=', $periodo1)
             ->where('referencia', '<=', $periodo2)
             ->where('oficial_praca', 2)
@@ -285,13 +232,10 @@ class DashboardController extends Controller
 
     public function dashboard8($periodo1, $periodo2, $orgao_id)
     {
-        //Array de retorno
+        //Arrays de retorno
         $dados = array();
-
-        //Series
-        $series = array();
-
-        $yaxis_max = 0;
+        $series_data = array();
+        $xaxis_categories = array();
 
         $valores_devidos = 0;
         $valores_pagos = 0;
@@ -313,33 +257,29 @@ class DashboardController extends Controller
         foreach ($registros as $registro) {
             $valores_devidos = $valores_devidos + $registro['valor_devido'];
             $valores_pagos = $valores_pagos + $registro['valor_pago'];
-
-            if ($valores_devidos > $yaxis_max) {$yaxis_max = $valores_devidos;}
         }
 
-        $series[] = ['name' => 'Valor Devido', 'data' => [number_format($valores_devidos, 2, '.', '')]];
-        $series[] = ['name' => 'Valor Pago', 'data' => [number_format($valores_pagos, 2, '.', '')]];
+        $series_data[] = $valores_devidos;
+        $series_data[] = $valores_pagos;
 
-        $dados['series'] = $series;
+        $xaxis_categories[] = 'Valor Devido';
+        $xaxis_categories[] = 'Valor Pago';
 
-        //yaxis_max
-        $dados['yaxis_max'] = $yaxis_max;
+        //Retorno
+        $dados['series_data'] = $series_data;
+        $dados['xaxis_categories'] = $xaxis_categories;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
+
+        //$series[] = ['name' => 'Valor Devido', 'data' => []];
+        //$series[] = ['name' => 'Valor Pago', 'data' => []];
     }
 
     public function dashboard9($periodo1, $periodo2, $orgao_id)
     {
-        //Array de retorno
+        //Arrays de retorno
         $dados = array();
-
-        //Series
         $series = array();
-
-        //Cores
-        $colors = array();
-
-        //Labels
         $labels = array();
 
         //Varrer Esperas
@@ -356,28 +296,27 @@ class DashboardController extends Controller
 
             $series[] = $qtd;
             $labels[] = $esfera['name'];
-            $colors[] = SuporteFacade::gerarCorAleatoria();
         }
 
+        //Retorno
+        $dados['quantidade_orgaos'] = RessarcimentoOrgao
+            ::join('ressarcimento_militares', 'ressarcimento_militares.lotacao_id', 'ressarcimento_orgaos.lotacao_id')
+            ->select('ressarcimento_orgaos.*')
+            ->distinct('ressarcimento_orgaos.lotacao_id')
+            ->where('ressarcimento_militares.referencia', '>=', $periodo1)
+            ->where('ressarcimento_militares.referencia', '<=', $periodo2)
+            ->count();
         $dados['series'] = $series;
         $dados['labels'] = $labels;
-        $dados['colors'] = $colors;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard10($periodo1, $periodo2, $orgao_id)
     {
-        //Array de retorno
+        //Arrays de retorno
         $dados = array();
-
-        //Series
         $series = array();
-
-        //Cores
-        $colors = array();
-
-        //Labels
         $labels = array();
 
         //Varrer Poderes
@@ -394,25 +333,31 @@ class DashboardController extends Controller
 
             $series[] = $qtd;
             $labels[] = $poder['name'];
-            $colors[] = SuporteFacade::gerarCorAleatoria();
         }
 
+        //Retorno
+        $dados['quantidade_orgaos'] = RessarcimentoOrgao
+            ::join('ressarcimento_militares', 'ressarcimento_militares.lotacao_id', 'ressarcimento_orgaos.lotacao_id')
+            ->select('ressarcimento_orgaos.*')
+            ->distinct('ressarcimento_orgaos.lotacao_id')
+            ->where('ressarcimento_militares.referencia', '>=', $periodo1)
+            ->where('ressarcimento_militares.referencia', '<=', $periodo2)
+            ->count();
         $dados['series'] = $series;
         $dados['labels'] = $labels;
-        $dados['colors'] = $colors;
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
 
     public function dashboard11($periodo1, $periodo2, $orgao_id)
     {
-        //Arrays
+        //Arrays de retorno
         $dados = array();
-        $series = array();
-        $colors = array();
+        $series_data_valores_devidos = array();
+        $series_data_valores_pagos = array();
         $xaxis_categories = array();
-        $valores_devidos = array();
-        $valores_pagos = array();
+        $yaxis_min = 999999999999999;
+        $yaxis_max = 0;
 
         //Referências
         $ressarcimentoReferencias = RessarcimentoReferencia
@@ -447,7 +392,11 @@ class DashboardController extends Controller
                     $val_tot += $valor['valor_devido'];
                 }
             }
-            $valores_devidos[] = number_format($val_tot, 2, '.', '');
+            $series_data_valores_devidos[] = $val_tot;
+
+            //Verificando valor Mínimo e Máximo
+            if ($val_tot < $yaxis_min) {$yaxis_min = $val_tot;}
+            if ($val_tot > $yaxis_max) {$yaxis_max = $val_tot;}
 
             //Valor Pago pelo Órgão
             $valores = RessarcimentoCobrancaDado
@@ -468,27 +417,128 @@ class DashboardController extends Controller
                     $val_tot += $valor['valor_pago'];
                 }
             }
-            $valores_pagos[] = number_format($val_tot, 2, '.', '');
+            $series_data_valores_pagos[] = $val_tot;
+
+            //Verificando valor Mínimo e Máximo
+            if ($val_tot < $yaxis_min) {$yaxis_min = $val_tot;}
+            if ($val_tot > $yaxis_max) {$yaxis_max = $val_tot;}
         }
 
-        $series[] = ['name' => 'Valor Devido', 'data' => $valores_devidos];
-        $series[] = ['name' => 'Valor Pago', 'data' => $valores_pagos];
-
-        $colors[] = "#556ee6";
-        $colors[] = "#34c38f";
-
-        $dados['series'] = $series;
-        $dados['colors'] = $colors;
+        //Retorno
+        $dados['series_data_valores_devidos'] = $series_data_valores_devidos;
+        $dados['series_data_valores_pagos'] = $series_data_valores_pagos;
         $dados['xaxis_categories'] = $xaxis_categories;
 
-        $dados['titulo1'] = 'Referências';
-        $dados['titulo2'] = 'Valores';
-        $dados['titulo3'] = 'Todos os Órgãos';
+        return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
+    }
 
-        if ($orgao_id != 0) {
-            $orgao = RessarcimentoOrgao::where('id', $orgao_id)->get();
-            $dados['titulo3'] = $orgao[0]['name'];
-        }
+    public function dashboard12($data1, $data2, $subconta_id)
+    {
+        //Array
+        $dados = array();
+
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 4;
+        $parametros['data1'] = $data1;
+        $parametros['data2'] = $data2;
+        $parametros['subconta_id'] = $subconta_id;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
+        $registros = $registros['success'];
+
+        //Retorno
+        $dados['total_repasses'] = $registros[0]['total_repasses'];
+        $dados['total_despesas'] = $registros[0]['total_despesas'];
+
+        return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
+    }
+
+    public function dashboard13($data1, $data2, $subconta_id)
+    {
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 5;
+        $parametros['data1'] = $data1;
+        $parametros['data2'] = $data2;
+        $parametros['subconta_id'] = $subconta_id;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
+        $registros = $registros['success'][0];
+
+        return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $registros), 200);
+    }
+
+    public function dashboard14($data1, $data2, $subconta_id)
+    {
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 5;
+        $parametros['data1'] = $data1;
+        $parametros['data2'] = $data2;
+        $parametros['subconta_id'] = $subconta_id;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
+        $registros = $registros['success'][0];
+
+        return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $registros), 200);
+    }
+
+    public function dashboard15($data1, $data2, $subconta_id)
+    {
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 5;
+        $parametros['data1'] = $data1;
+        $parametros['data2'] = $data2;
+        $parametros['subconta_id'] = $subconta_id;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
+        $registros = $registros['success'][0];
+
+        return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $registros), 200);
+    }
+
+    public function dashboard16($data1, $data2, $subconta_id)
+    {
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 5;
+        $parametros['data1'] = $data1;
+        $parametros['data2'] = $data2;
+        $parametros['subconta_id'] = $subconta_id;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
+        $registros = $registros['success'][0];
+
+        return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $registros), 200);
+    }
+
+    public function dashboard17($data1, $data2, $subconta_id)
+    {
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 5;
+        $parametros['data1'] = $data1;
+        $parametros['data2'] = $data2;
+        $parametros['subconta_id'] = $subconta_id;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
+        $registros = $registros['success'][0];
+
+        return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $registros), 200);
+    }
+
+    public function dashboards_ids($agrupamento_id)
+    {
+        //Array
+        $dados = array();
+
+        //Grupo Dashboards
+        $dados['dashboards_ids'] = Dashboard
+            ::where('agrupamento_id', $agrupamento_id)
+            ->select('id')
+            ->get();
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
     }
@@ -502,16 +552,16 @@ class DashboardController extends Controller
         $dados['grupo_dashboards'] = GrupoDashboard
             ::join('grupos', 'grupos.id', '=', 'grupos_dashboards.grupo_id')
             ->join('dashboards', 'dashboards.id', '=', 'grupos_dashboards.dashboard_id')
-            ->join('modulos', 'modulos.id', '=', 'dashboards.modulo_id')
-            ->select('grupos_dashboards.id as grupo_dashboard_id', 'dashboards.id as dashboard_id', 'dashboards.name as dashboard_name', 'dashboards.descricao as dashboard_descricao', 'modulos.menu_icon as dashboard_icone', 'modulos.name as dashboard_modulo')
+            ->join('agrupamentos', 'agrupamentos.id', '=', 'dashboards.agrupamento_id')
+            ->select('dashboards.id as dashboard_id', 'dashboards.name as dashboard_name', 'dashboards.descricao as dashboard_descricao', 'dashboards.principal_dashboard_id as dashboard_principal_dashboard_id', 'agrupamentos.icone as dashboard_icone', 'agrupamentos.id as dashboard_agrupamento_id', 'agrupamentos.name as dashboard_agrupamento')
             ->where('grupos_dashboards.grupo_id', Auth::user()->grupo_id)
-            ->orderBy('dashboards.modulo_id')
+            ->orderBy('dashboards.agrupamento_id')
             ->orderBy('dashboards.ordem_visualizacao')
             ->get();
 
         //Dashboards Views
         $dados['dashboards_views'] = UserDashboardViews
-            ::join('grupos_dashboards', 'grupos_dashboards.id', '=', 'users_dashboards_views.grupo_dashboard_id')
+            ::join('dashboards', 'dashboards.id', '=', 'users_dashboards_views.dashboard_id')
             ->select('users_dashboards_views.*')
             ->where('users_dashboards_views.user_id', Auth::user()->id)
             ->orderby('users_dashboards_views.ordem_visualizacao', 'ASC')
@@ -530,8 +580,8 @@ class DashboardController extends Controller
             $grupo_dashboards = GrupoDashboard::where('grupo_id', Auth::user()->grupo_id)->get();
 
             foreach ($grupo_dashboards as $grupo_dashboard) {
-                if (isset($request['grupo_dashboard_id_'.$grupo_dashboard['id']])) {
-                    UserDashboardViews::create(['user_id' => Auth::user()->id, 'grupo_dashboard_id' => $request['grupo_dashboard_id_'.$grupo_dashboard['id']], 'ordem_visualizacao' => $request['ordem_visualizacao_'.$grupo_dashboard['id']]]);
+                if (isset($request['dashboard_id_'.$grupo_dashboard['dashboard_id']])) {
+                    UserDashboardViews::create(['user_id' => Auth::user()->id, 'dashboard_id' => $request['dashboard_id_'.$grupo_dashboard['dashboard_id']], 'largura' => $request['largura_'.$grupo_dashboard['dashboard_id']], 'ordem_visualizacao' => $request['ordem_visualizacao_'.$grupo_dashboard['dashboard_id']]]);
                 }
             }
 

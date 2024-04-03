@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('menu_url')->unique();
             $table->string('menu_route')->unique();
             $table->string('menu_icon')->unique();
-            $table->integer('viewing_order');
+            $table->integer('ordem_visualizacao');
             $table->timestamps();
             $table->softDeletes();
         });

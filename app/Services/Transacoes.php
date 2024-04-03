@@ -149,7 +149,7 @@ class Transacoes
                     $dados .= $this->retornaDado(1, $dadosAnterior['url'], $dadosAtual['url'], 'URL', '', '');
                     $dados .= $this->retornaDado(1, $dadosAnterior['icon'], $dadosAtual['icon'], 'Ícone', '', '');
                     $dados .= $this->retornaDado(2, $dadosAnterior['user_id'], $dadosAtual['user_id'], 'Usuário', User::class, 'name');
-                    $dados .= $this->retornaDado(1, $dadosAnterior['viewing_order'], $dadosAtual['viewing_order'], 'Ordem Visualização', '', '');
+                    $dados .= $this->retornaDado(1, $dadosAnterior['ordem_visualizacao'], $dadosAtual['ordem_visualizacao'], 'Ordem Visualização', '', '');
                 }
             }
 
@@ -306,6 +306,46 @@ class Transacoes
                     $dados .= $this->retornaDado(1, SuporteFacade::getValorFormatado(2, $dadosAnterior['saldo_restante']), SuporteFacade::getValorFormatado(2, $dadosAtual['saldo_restante']), 'Saldo Restante', '', '');
                     $dados .= $this->retornaDado(1, $dadosAnterior['guia_recolhimento'], $dadosAtual['guia_recolhimento'], 'Guia Recolhimento', '', '');
                     $dados .= $this->retornaDado(1, $dadosAnterior['documento'], $dadosAtual['documento'], 'Documento', '', '');
+                }
+            }
+
+            //Alimentação Tipos
+            if ($submodulo_id == 19) {
+                if ($op == 1) {
+                    $dados .= '<b>:: Alimentação Tipos</b>'.'<br><br>';
+                    $dados .= $this->retornaDado(1, $dadosAnterior['name'], $dadosAtual['name'], 'Nome', '', '');
+                }
+            }
+
+            //Alimentação Planos
+            if ($submodulo_id == 20) {
+                if ($op == 1) {
+                    $dados .= '<b>:: Alimentação Planos</b>'.'<br><br>';
+                    $dados .= $this->retornaDado(1, $dadosAnterior['name'], $dadosAtual['name'], 'Nome', '', '');
+                }
+            }
+
+            //Alimentação Unidades
+            if ($submodulo_id == 21) {
+                if ($op == 1) {
+                    $dados .= '<b>:: Alimentação Unidades</b>'.'<br><br>';
+                    $dados .= $this->retornaDado(1, $dadosAnterior['name'], $dadosAtual['name'], 'Nome', '', '');
+                }
+            }
+
+            //Alimentação Remanejamentos
+            if ($submodulo_id == 22) {
+                if ($op == 1) {
+                    $dados .= '<b>:: Alimentação Remanejamentos</b>'.'<br><br>';
+                    $dados .= $this->retornaDado(1, $dadosAnterior['name'], $dadosAtual['name'], 'Nome', '', '');
+                }
+            }
+
+            //Alimentação Quantitativos
+            if ($submodulo_id == 23) {
+                if ($op == 1) {
+                    $dados .= '<b>:: Alimentação Quantitativos</b>'.'<br><br>';
+                    $dados .= $this->retornaDado(1, $dadosAnterior['name'], $dadosAtual['name'], 'Nome', '', '');
                 }
             }
             //'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''

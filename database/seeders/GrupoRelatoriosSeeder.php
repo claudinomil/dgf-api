@@ -18,8 +18,6 @@ class GrupoRelatoriosSeeder extends Seeder
         GrupoRelatorio::create(['grupo_id' => 1, 'relatorio_id' => 6]);
         GrupoRelatorio::create(['grupo_id' => 1, 'relatorio_id' => 7]);
         GrupoRelatorio::create(['grupo_id' => 1, 'relatorio_id' => 8]);
-        GrupoRelatorio::create(['grupo_id' => 1, 'relatorio_id' => 9]);
-        GrupoRelatorio::create(['grupo_id' => 1, 'relatorio_id' => 10]);
 
         //grupo_id=2
         GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 1]);
@@ -27,11 +25,6 @@ class GrupoRelatoriosSeeder extends Seeder
         GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 3]);
         GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 4]);
         GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 5]);
-        GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 6]);
-        GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 7]);
-        GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 8]);
-        GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 9]);
-        GrupoRelatorio::create(['grupo_id' => 2, 'relatorio_id' => 10]);
 
         //grupo_id=3
         GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 1]);
@@ -39,11 +32,6 @@ class GrupoRelatoriosSeeder extends Seeder
         GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 3]);
         GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 4]);
         GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 5]);
-        GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 6]);
-        GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 7]);
-        GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 8]);
-        GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 9]);
-        GrupoRelatorio::create(['grupo_id' => 3, 'relatorio_id' => 10]);
 
         //grupo_id=4
         GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 1]);
@@ -51,11 +39,6 @@ class GrupoRelatoriosSeeder extends Seeder
         GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 3]);
         GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 4]);
         GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 5]);
-        GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 6]);
-        GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 7]);
-        GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 8]);
-        GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 9]);
-        GrupoRelatorio::create(['grupo_id' => 4, 'relatorio_id' => 10]);
 
         //grupo_id=5
         GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 1]);
@@ -63,11 +46,6 @@ class GrupoRelatoriosSeeder extends Seeder
         GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 3]);
         GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 4]);
         GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 5]);
-        GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 6]);
-        GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 7]);
-        GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 8]);
-        GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 9]);
-        GrupoRelatorio::create(['grupo_id' => 5, 'relatorio_id' => 10]);
 
         //grupo_id=6
         GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 1]);
@@ -75,10 +53,5 @@ class GrupoRelatoriosSeeder extends Seeder
         GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 3]);
         GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 4]);
         GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 5]);
-        GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 6]);
-        GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 7]);
-        GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 8]);
-        GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 9]);
-        GrupoRelatorio::create(['grupo_id' => 6, 'relatorio_id' => 10]);
     }
 }

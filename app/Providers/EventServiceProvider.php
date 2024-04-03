@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\AlimentacaoPlano;
+use App\Models\AlimentacaoQuantitativo;
+use App\Models\AlimentacaoRemanejamento;
+use App\Models\AlimentacaoTipo;
+use App\Models\AlimentacaoUnidade;
 use App\Models\Grupo;
 use App\Models\RessarcimentoCobranca;
 use App\Models\RessarcimentoConfiguracao;
@@ -15,6 +20,11 @@ use App\Models\RessarcimentoReferencia;
 use App\Models\Situacao;
 use App\Models\Ferramenta;
 use App\Models\User;
+use App\Observers\AlimentacaoPlanoObserver;
+use App\Observers\AlimentacaoQuantitativoObserver;
+use App\Observers\AlimentacaoRemanejamentoObserver;
+use App\Observers\AlimentacaoTipoObserver;
+use App\Observers\AlimentacaoUnidadeObserver;
 use App\Observers\GrupoObserver;
 use App\Observers\RessarcimentoCobrancaObserver;
 use App\Observers\RessarcimentoConfiguracaoObserver;
@@ -49,6 +59,11 @@ class EventServiceProvider extends ServiceProvider
         Operacao::observe(OperacaoObserver::class);
         Situacao::observe(SituacaoObserver::class);
         User::observe(UserObserver::class);
+        AlimentacaoTipo::observe(AlimentacaoTipoObserver::class);
+        AlimentacaoPlano::observe(AlimentacaoPlanoObserver::class);
+        AlimentacaoUnidade::observe(AlimentacaoUnidadeObserver::class);
+        AlimentacaoRemanejamento::observe(AlimentacaoRemanejamentoObserver::class);
+        AlimentacaoQuantitativo::observe(AlimentacaoQuantitativoObserver::class);
         RessarcimentoCobranca::observe(RessarcimentoCobrancaObserver::class);
         RessarcimentoConfiguracao::observe(RessarcimentoConfiguracaoObserver::class);
         RessarcimentoPagamento::observe(RessarcimentoPagamentoObserver::class);

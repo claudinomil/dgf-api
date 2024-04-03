@@ -427,21 +427,21 @@ class UserController extends Controller
                     ->get();
 
                 //Menu Módulos
-                //$registros['menuModulos'] = Modulo::where('viewing_order', '>', '0')->orderBy('viewing_order', 'asc')->orderBy('name', 'asc')->get();
+                //$registros['menuModulos'] = Modulo::where('ordem_visualizacao', '>', '0')->orderBy('ordem_visualizacao', 'asc')->orderBy('name', 'asc')->get();
                 $registros['menuModulos'] = Modulo
                     ::leftjoin('setores', 'setores.id', 'modulos.setor_id')
                     ->select('modulos.*', 'setores.name as setor_name', 'setores.menu_icon as setor_menu_icon')
-                    ->where('viewing_order', '>', '0')
+                    ->where('modulos.ordem_visualizacao', '>', '0')
                     ->orderBy('setores.ordem_visualizacao', 'asc')
-                    ->orderBy('modulos.viewing_order', 'asc')
+                    ->orderBy('modulos.ordem_visualizacao', 'asc')
                     ->orderBy('modulos.name', 'asc')
                     ->get();
 
                 //Menu Submódulos
                 $registros['menuSubmodulos'] = Submodulo
                     ::select('submodulos.*')
-                    ->where('viewing_order', '>', '0')
-                    ->orderBy('viewing_order', 'asc')
+                    ->where('ordem_visualizacao', '>', '0')
+                    ->orderBy('ordem_visualizacao', 'asc')
                     ->orderBy('name', 'asc')
                     ->get();
 

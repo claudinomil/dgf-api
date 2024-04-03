@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('relatorios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('modulo_id')->constrained('modulos');
+            $table->foreignId('agrupamento_id')->constrained('agrupamentos');
             $table->string('name');
             $table->string('descricao');
             $table->integer('ordem_visualizacao');

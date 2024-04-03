@@ -21,6 +21,6 @@ class Submodulo extends Model
         'prefix_permissao',
         'prefix_route',
         'descricao',
-        'viewing_order'
+        'ordem_visualizacao'
     ];
 }

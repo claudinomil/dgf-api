@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('prefix_permissao')->unique();
             $table->string('prefix_route')->unique();
             $table->string('descricao')->nullable();
-            $table->integer('viewing_order');
+            $table->integer('ordem_visualizacao');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -41,7 +41,7 @@ class GrupoController extends Controller
 
             //Varrendo Submodulos para pegar Permissoes por submodulos
             $submodulos = Submodulo::all();
-            foreach ($submodulos as $key => $submodulo) {
+            foreach ($submodulos as $submodulo) {
                 $submodulo_id = $submodulo->id;
                 $submodulo_name = $submodulo->name;
 
@@ -144,10 +144,10 @@ class GrupoController extends Controller
             $registros['permissoes'] = Permissao::all();
 
             //Dashboards
-            $registros['dashboards'] = Dashboard::select('dashboards.*', 'modulos.name as modulo_name')->join('modulos', 'modulos.id', 'dashboards.modulo_id')->orderby('modulo_id')->orderby('ordem_visualizacao')->get();
+            $registros['dashboards'] = Dashboard::select('dashboards.*', 'agrupamentos.name as dashboard_agrupamento')->join('agrupamentos', 'agrupamentos.id', 'dashboards.agrupamento_id')->orderby('agrupamentos.ordem_visualizacao')->orderby('dashboards.ordem_visualizacao')->get();
 
             //Relatorios
-            $registros['relatorios'] = Relatorio::select('relatorios.*', 'modulos.name as modulo_name')->join('modulos', 'modulos.id', 'relatorios.modulo_id')->orderby('modulo_id')->orderby('ordem_visualizacao')->get();
+            $registros['relatorios'] = Relatorio::select('relatorios.*', 'agrupamentos.name as relatorio_agrupamento')->join('agrupamentos', 'agrupamentos.id', 'relatorios.agrupamento_id')->orderby('agrupamentos.ordem_visualizacao')->orderby('relatorios.ordem_visualizacao')->get();
 
             return response()->json(ApiReturn::data('Registro enviado com sucesso.', 2000, null, $registros), 200);
         } catch (\Exception $e) {

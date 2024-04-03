@@ -10,8 +10,11 @@ class EfetivoMilitarController extends Controller
 {
     public function index()
     {
-        //WebService SAC - DGF
-        $registros = SuporteFacade::webserviceSacDgf(2, '', '', 500);
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 2;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
         $registros = $registros['success'];
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, null, $registros), 200);
@@ -20,8 +23,13 @@ class EfetivoMilitarController extends Controller
     public function show($id)
     {
         try {
-            //WebService SAC - DGF
-            $registro = SuporteFacade::webserviceSacDgf(1, 'efetivo_id', $id);
+            //WebService - DGF
+            $parametros = array();
+            $parametros['evento'] = 1;
+            $parametros['field'] = 'efetivo_id';
+            $parametros['value'] = $id;
+
+            $registro = SuporteFacade::webserviceDgf($parametros);
             $registro = $registro['success'][0];
 
             if (!$registro) {
@@ -53,8 +61,26 @@ class EfetivoMilitarController extends Controller
             $operacao = $filtros[$indexCampo+2];
             $dado = $filtros[$indexCampo+3];
 
-            //Formatando $dado
-            if ($operacao == 2) {if ($campo == 'dbu_efetivo.rg') {$dado = SuporteFacade::getRG(2, $dado);}}
+            //Formatando $dado se campo = dbu_efetivo.rg
+            if ($campo == 'dbu_efetivo.rg') {
+                //Operação
+                //$operacao=1 : Contém
+                //$operacao=2 : Igual
+                //$operacao=3 : Maior que
+                //$operacao=4 : Maior ou igual a
+                //$operacao=5 : Menor que
+                //$operacao=6 : Menor ou igual a
+                //$operacao=7 : No início
+                //$operacao=8 : No fim
+
+                if ($operacao == 1) {
+                    $dado = SuporteFacade::getRG(0, $dado);
+                    $dado = SuporteFacade::getRG(4, $dado);
+                } else if ($operacao == 2 || $operacao == 3 || $operacao == 4 || $operacao == 5 || $operacao == 6) {
+                    $dado = SuporteFacade::getRG(0, $dado);
+                    $dado = SuporteFacade::getRG(2, $dado);
+                }
+            }
 
             //Operações
             if ($operacao == 1) {
@@ -88,8 +114,12 @@ class EfetivoMilitarController extends Controller
 
         //return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, null, $selectWhere), 200);
 
-        //WebService SAC - DGF
-        $registros = SuporteFacade::webserviceSacDgf(2, '', '', 500, $selectWhere);
+        //WebService - DGF
+        $parametros = array();
+        $parametros['evento'] = 2;
+        $parametros['selectWhere'] = $selectWhere;
+
+        $registros = SuporteFacade::webserviceDgf($parametros);
         $registros = $registros['success'];
 
 

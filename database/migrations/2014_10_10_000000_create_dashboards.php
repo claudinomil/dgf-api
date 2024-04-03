@@ -10,10 +10,12 @@ return new class extends Migration
     {
         Schema::create('dashboards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('modulo_id')->constrained('modulos');
+            $table->foreignId('agrupamento_id')->constrained('agrupamentos');
             $table->string('name');
             $table->string('descricao');
+            $table->integer('largura')->default(4);
             $table->integer('ordem_visualizacao');
+            $table->integer('principal_dashboard_id')->default(0); //Se for 0(Zero) é o Card Principal / Se não é o id do dashbord Principal
             $table->timestamps();
         });
     }

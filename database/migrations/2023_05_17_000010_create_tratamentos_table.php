@@ -12,7 +12,7 @@ class CreateTratamentosTable extends Migration
             $table->id();
             $table->string('completo');
             $table->string('reduzido');
-            $table->integer('viewing_order')->default(0);
+            $table->integer('ordem_visualizacao')->default(0);
             $table->timestamps();
         });
     }

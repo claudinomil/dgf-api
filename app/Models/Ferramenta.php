@@ -16,7 +16,7 @@ class Ferramenta extends Model
         'descricao',
         'url',
         'icon',
-        'viewing_order',
+        'ordem_visualizacao',
         'user_id'
     ];
 

@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('users_dashboards_views', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('grupo_dashboard_id')->constrained('grupos_dashboards');
+            $table->foreignId('dashboard_id')->constrained('dashboards');
+            $table->integer('largura')->default(4);
             $table->integer('ordem_visualizacao')->default(1);
             $table->timestamps();
         });

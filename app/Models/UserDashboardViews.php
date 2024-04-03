@@ -13,7 +13,8 @@ class UserDashboardViews extends Model
 
     protected $fillable = [
         'user_id',
-        'grupo_dashboard_id',
+        'dashboard_id',
+        'largura',
         'ordem_visualizacao'
     ];
 }

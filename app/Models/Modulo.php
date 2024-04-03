@@ -18,6 +18,6 @@ class Modulo extends Model
         'menu_url',
         'menu_route',
         'menu_icon',
-        'viewing_order'
+        'ordem_visualizacao'
     ];
 }

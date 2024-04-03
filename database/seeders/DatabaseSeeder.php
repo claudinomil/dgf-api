@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             SetoresSeeder::class,
             ModulosSeeder::class,
             SubmodulosSeeder::class,
+            AgrupamentosSeeder::class,
             DashboardsSeeder::class,
             RelatoriosSeeder::class,
             GruposSeeder::class,

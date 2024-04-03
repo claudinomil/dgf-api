@@ -56,11 +56,23 @@ require __DIR__ . '/routes_ressarcimento_cobrancas.php';
 //Ressarcimento Recebimentos
 require __DIR__ . '/routes_ressarcimento_recebimentos.php';
 
-//Ressarcimento Relatorios
-require __DIR__ . '/routes_ressarcimento_relatorios.php';
-
 //Efetivo Militares
 require __DIR__ . '/routes_efetivo_militares.php';
 
 //Relatorios
 require __DIR__ . '/routes_relatorios.php';
+
+//Alimentação Tipos
+require __DIR__.'/routes_alimentacao_tipos.php';
+
+//Alimentação Planos
+require __DIR__.'/routes_alimentacao_planos.php';
+
+//Alimentação Unidades
+require __DIR__.'/routes_alimentacao_unidades.php';
+
+//Alimentação Remanejamentos
+require __DIR__.'/routes_alimentacao_remanejamentos.php';
+
+//Alimentação Quantitativos
+require __DIR__.'/routes_alimentacao_quantitativos.php';

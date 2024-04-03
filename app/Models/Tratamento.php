@@ -14,6 +14,6 @@ class Tratamento extends Model
     protected $fillable = [
         'completo',
         'reduzido',
-        'viewing_order'
+        'ordem_visualizacao'
     ];
 }

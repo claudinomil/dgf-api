@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('url');
             $table->string('icon');
             $table->foreignId('user_id')->constrained('users');
-            $table->integer('viewing_order');
+            $table->integer('ordem_visualizacao');
             $table->timestamps();
             $table->softDeletes();
         });
