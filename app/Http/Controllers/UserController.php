@@ -6,6 +6,7 @@ use App\API\ApiReturn;
 use App\Facades\SuporteFacade;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Agrupamento;
 use App\Models\Ferramenta;
 use App\Models\Grupo;
 use App\Models\GrupoDashboard;
@@ -507,6 +508,33 @@ class UserController extends Controller
         }
     }
 
+    public function userWelcomePermissao()
+    {
+        try {
+            if (!Auth::check()) {
+                return response()->json(ApiReturn::data('Usuário não está logado.', 4040, null, null), 404);
+            } else {
+
+                //Cria array
+                $registros = array();
+
+                //Dados Usuário Logado
+                $registros['userData'] = Auth::user();
+
+                //Agrupamentos
+                $registros['agrupamentos'] = Agrupamento::orderby('ordem_visualizacao', 'ASC')->get();
+
+                return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, null, $registros), 200);
+            }
+        } catch (\Exception $e) {
+            if (config('app.debug')) {
+                return response()->json(ApiReturn::data($e->getMessage(), 5000, null, null), 500);
+            }
+
+            return response()->json(ApiReturn::data('Houve um erro ao realizar a operação.', 5000, null, null), 500);
+        }
+    }
+
     public function userLoggedData()
     {
         try {
@@ -593,7 +621,7 @@ class UserController extends Controller
                 return response()->json(ApiReturn::data('Usuário não confirmado.', 2001, null, null), 200);
             }
         } else {
-            return response()->json(ApiReturn::data('Código do Cliente e/ou Usuário não encontrado.', 2002, null, null), 200);
+            return response()->json(ApiReturn::data('Usuário não encontrado.', 2002, null, null), 200);
         }
     }
 

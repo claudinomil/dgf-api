@@ -24,6 +24,9 @@ Route::prefix('users')->group(function () {
     //Usuário - retorna dados e permissões
     Route::get('/user/permissoes/settings/{searchSubmodulo}', [UserController::class, 'userPermissoesSettings'])->middleware(['auth:api', 'scope:claudino']);
 
+    //Usuário - welcome Permissão
+    Route::get('/user/welcome/permissao', [UserController::class, 'userWelcomePermissao'])->middleware(['auth:api', 'scope:claudino']);
+
     //Logout
     Route::post('logout', [UserController::class, 'logout'])->middleware(['auth:api', 'scope:claudino']);
 });

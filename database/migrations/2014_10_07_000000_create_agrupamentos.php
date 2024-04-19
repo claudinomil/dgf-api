@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('agrupamentos', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('icone');
             $table->integer('ordem_visualizacao');
             $table->timestamps();
         });

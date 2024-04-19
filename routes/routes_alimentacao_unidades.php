@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AlimentacaoUnidadeController;
 
-Route::prefix('alimentacao_unidade')->group(function () {
+Route::prefix('alimentacao_unidades')->group(function () {
     Route::get('/index', [AlimentacaoUnidadeController::class, 'index'])->middleware(['auth:api', 'scope:claudino']);
     Route::get('/show/{id}', [AlimentacaoUnidadeController::class, 'show'])->middleware(['auth:api', 'scope:claudino']);
     Route::get('/filter/{array_dados}', [AlimentacaoUnidadeController::class, 'filter'])->middleware(['auth:api', 'scope:claudino']);

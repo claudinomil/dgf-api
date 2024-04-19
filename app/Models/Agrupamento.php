@@ -13,7 +13,6 @@ class Agrupamento extends Model
 
     protected $fillable = [
         'name',
-        'icone',
         'ordem_visualizacao'
     ];
 }

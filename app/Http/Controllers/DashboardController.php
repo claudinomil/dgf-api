@@ -29,8 +29,17 @@ class DashboardController extends Controller
         //Retorno
         $content = array();
 
-        //Agrupamentos
-        $content['agrupamentos'] = Agrupamento::orderby('ordem_visualizacao', 'ASC')->get();
+        //Agrupamentos do Usuário
+        $content['agrupamentos'] = UserDashboardViews
+            ::join('dashboards', 'dashboards.id', '=', 'users_dashboards_views.dashboard_id')
+            ->join('grupos_dashboards', 'grupos_dashboards.dashboard_id', '=', 'dashboards.id')
+            ->join('agrupamentos', 'agrupamentos.id', '=', 'dashboards.agrupamento_id')
+            ->select('agrupamentos.*')
+            ->distinct('agrupamentos.name')
+            ->where('users_dashboards_views.user_id', Auth::user()->id)
+            ->where('grupos_dashboards.grupo_id', Auth::user()->grupo_id)
+            ->orderby('agrupamentos.ordem_visualizacao', 'ASC')
+            ->get();
 
         //Retorno dashboards_modal_filtro_1
         $content['ressarcimento_referencias'] = RessarcimentoReferencia::select('referencia')->orderby('referencia', 'DESC')->get();
@@ -536,8 +545,9 @@ class DashboardController extends Controller
 
         //Grupo Dashboards
         $dados['dashboards_ids'] = Dashboard
-            ::where('agrupamento_id', $agrupamento_id)
-            ->select('id')
+            ::join('users_dashboards_views', 'users_dashboards_views.dashboard_id', 'dashboards.id')
+            ->where('agrupamento_id', $agrupamento_id)
+            ->select('dashboards.id as id')
             ->get();
 
         return response()->json(ApiReturn::data('Lista de dados enviada com sucesso.', 2000, '', $dados), 200);
@@ -548,12 +558,24 @@ class DashboardController extends Controller
         //Array
         $dados = array();
 
+        //Agrupamentos do Usuário
+        $dados['agrupamentos'] = UserDashboardViews
+            ::join('dashboards', 'dashboards.id', '=', 'users_dashboards_views.dashboard_id')
+            ->join('grupos_dashboards', 'grupos_dashboards.dashboard_id', '=', 'dashboards.id')
+            ->join('agrupamentos', 'agrupamentos.id', '=', 'dashboards.agrupamento_id')
+            ->select('agrupamentos.*')
+            ->distinct('agrupamentos.name')
+            ->where('users_dashboards_views.user_id', Auth::user()->id)
+            ->where('grupos_dashboards.grupo_id', Auth::user()->grupo_id)
+            ->orderby('agrupamentos.ordem_visualizacao', 'ASC')
+            ->get();
+
         //Grupo Dashboards
         $dados['grupo_dashboards'] = GrupoDashboard
             ::join('grupos', 'grupos.id', '=', 'grupos_dashboards.grupo_id')
             ->join('dashboards', 'dashboards.id', '=', 'grupos_dashboards.dashboard_id')
             ->join('agrupamentos', 'agrupamentos.id', '=', 'dashboards.agrupamento_id')
-            ->select('dashboards.id as dashboard_id', 'dashboards.name as dashboard_name', 'dashboards.descricao as dashboard_descricao', 'dashboards.principal_dashboard_id as dashboard_principal_dashboard_id', 'agrupamentos.icone as dashboard_icone', 'agrupamentos.id as dashboard_agrupamento_id', 'agrupamentos.name as dashboard_agrupamento')
+            ->select('dashboards.id as dashboard_id', 'dashboards.name as dashboard_name', 'dashboards.descricao as dashboard_descricao', 'dashboards.principal_dashboard_id as dashboard_principal_dashboard_id', 'agrupamentos.id as dashboard_agrupamento_id', 'agrupamentos.name as dashboard_agrupamento')
             ->where('grupos_dashboards.grupo_id', Auth::user()->grupo_id)
             ->orderBy('dashboards.agrupamento_id')
             ->orderBy('dashboards.ordem_visualizacao')
@@ -562,8 +584,10 @@ class DashboardController extends Controller
         //Dashboards Views
         $dados['dashboards_views'] = UserDashboardViews
             ::join('dashboards', 'dashboards.id', '=', 'users_dashboards_views.dashboard_id')
+            ->join('grupos_dashboards', 'grupos_dashboards.dashboard_id', '=', 'dashboards.id')
             ->select('users_dashboards_views.*')
             ->where('users_dashboards_views.user_id', Auth::user()->id)
+            ->where('grupos_dashboards.grupo_id', Auth::user()->grupo_id)
             ->orderby('users_dashboards_views.ordem_visualizacao', 'ASC')
             ->get();
 
