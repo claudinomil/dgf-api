@@ -293,6 +293,11 @@ class UserController extends Controller
                 return response()->json(ApiReturn::data('Registro não encontrado.', 4040, null, $registro), 404);
             } else {
                 //Verificar Relacionamentos'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                //Tabela users_dashboards_views
+                if (SuporteFacade::verificarRelacionamento('users_dashboards_views', 'user_id', $id) > 0) {
+                    return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado em Usuários Dashboards.', 2040, null, null), 200);
+                }
+
                 //Tabela Transações
                 if (SuporteFacade::verificarRelacionamento('transacoes', 'user_id', $id) > 0) {
                     return response()->json(ApiReturn::data('Náo é possível excluir. Registro relacionado em Transações.', 2040, null, null), 200);
