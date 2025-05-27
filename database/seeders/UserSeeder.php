@@ -55,7 +55,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 2,
             'name' => 'EDUARDO FERREIRA GONCALVES',
-            'email' => 'eduardoferreira@ycbmerj.rj.gov.br',
+            'email' => 'eduardoferreira@cbmerj.rj.gov.br',
             'password' => Hash::make('12345678'),
             'email_verified_at' => now(),
             'user_confirmed_at' => now(),
@@ -95,7 +95,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 3,
             'name' => 'CAIO GUEDES DA SILVA',
-            'email' => 'caioguedes@ycbmerj.rj.gov.br',
+            'email' => 'caioguedes@cbmerj.rj.gov.br',
             'password' => Hash::make('12345678'),
             'email_verified_at' => now(),
             'user_confirmed_at' => now(),
@@ -135,7 +135,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 4,
             'name' => 'WILLIAN GUEDES DA SILVA',
-            'email' => 'willianguedes@ycbmerj.rj.gov.br',
+            'email' => 'willianguedes@cbmerj.rj.gov.br',
             'password' => Hash::make('12345678'),
             'email_verified_at' => now(),
             'user_confirmed_at' => now(),
@@ -175,7 +175,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 5,
             'name' => 'MONIQUE MAIA SILVA',
-            'email' => 'moniquemaia@ycbmerj.rj.gov.br',
+            'email' => 'moniquemaia@cbmerj.rj.gov.br',
             'password' => Hash::make('12345678'),
             'email_verified_at' => now(),
             'user_confirmed_at' => now(),

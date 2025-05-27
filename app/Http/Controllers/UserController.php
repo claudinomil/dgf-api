@@ -565,17 +565,24 @@ class UserController extends Controller
 
     public function logout()
     {
-        if (Auth::check()) {
-            //Removendo Token
-            $user = Auth::user()->token();
-            $user->revoke();
+        auth()->logout();
 
-            return $this->sendResponse('Logout realizado com sucesso e o token foi excluído.', 4001, null, null);
-
-        }
-
-        return $this->sendResponse('Logout não realizado.', 5000, null, null);
+        return $this->sendResponse('Logout realizado com sucesso e o token foi excluído.', 4001, null, null);
     }
+
+//    public function logout()
+//    {
+//        if (Auth::check()) {
+//            //Removendo Token
+//            $user = Auth::user()->token();
+//            $user->revoke();
+//
+//            return $this->sendResponse('Logout realizado com sucesso e o token foi excluído.', 4001, null, null);
+//
+//        }
+//
+//        return $this->sendResponse('Logout não realizado.', 5000, null, null);
+//    }
 
     public function exist($email)
     {
