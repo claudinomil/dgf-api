@@ -563,12 +563,12 @@ class UserController extends Controller
         }
     }
 
-    public function logout()
-    {
-        auth()->logout();
-
-        return $this->sendResponse('Logout realizado com sucesso e o token foi excluído.', 4001, null, null);
-    }
+//    public function logout()
+//    {
+//        auth()->logout();
+//
+//        return $this->sendResponse('Logout realizado com sucesso e o token foi excluído.', 4001, null, null);
+//    }
 
 //    public function logout()
 //    {

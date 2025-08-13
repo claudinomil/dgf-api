@@ -28,7 +28,7 @@ Route::prefix('users')->group(function () {
     Route::get('/user/welcome/permissao', [UserController::class, 'userWelcomePermissao'])->middleware(['auth:api']);
 
     //Logout
-    Route::post('logout', [UserController::class, 'logout'])->middleware(['auth:api']);
+    //Route::post('logout', [UserController::class, 'logout'])->middleware(['auth:api']);
 });
 
 //Verifica se usuário existe (pelo email)

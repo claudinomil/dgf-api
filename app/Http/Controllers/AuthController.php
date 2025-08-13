@@ -34,6 +34,13 @@ class AuthController extends Controller
         return response()->json($response, 200);
     }
 
+    public function logout()
+    {
+        auth()->logout();
+
+        return $this->sendResponse('Logout realizado com sucesso e o token foi excluído.', 4001, null, null);
+    }
+
     protected function respondWithToken($token)
     {
         return [
