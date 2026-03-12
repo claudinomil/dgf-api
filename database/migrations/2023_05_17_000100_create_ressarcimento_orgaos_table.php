@@ -11,7 +11,7 @@ class CreateRessarcimentoOrgaosTable extends Migration
         Schema::create('ressarcimento_orgaos', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('cnpj', 14)->nullable()->unique();
+            $table->string('cnpj', 14)->nullable();
             $table->string('ug', 11)->nullable();
             $table->string('responsavel')->nullable();
             $table->foreignId('esfera_id')->nullable()->constrained('esferas');

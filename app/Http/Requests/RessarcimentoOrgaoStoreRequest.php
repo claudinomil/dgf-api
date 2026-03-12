@@ -25,7 +25,8 @@ class RessarcimentoOrgaoStoreRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'cnpj' => ['nullable', 'unique:ressarcimento_orgaos', 'cnpj'],
+            //'cnpj' => ['nullable', 'unique:ressarcimento_orgaos', 'cnpj'],
+            'cnpj' => ['nullable', 'cnpj'],
             'esfera_id' => ['required', 'integer', 'numeric'],
             'poder_id' => ['required', 'integer', 'numeric'],
             'tratamento_id' => ['required', 'integer', 'numeric'],
@@ -47,7 +48,7 @@ class RessarcimentoOrgaoStoreRequest extends FormRequest
     {
         return [
             'name.required' => 'O Nome é requerido.',
-            'cnpj.unique' => 'O CNPJ já existe.',
+            //'cnpj.unique' => 'O CNPJ já existe.',
             'cnpj.cnpj' => 'O CNPJ não é um número válido.',
             'esfera_id.required' => 'Esfera é requerido.',
             'esfera_id.integer' => 'A Esfera deve ser um ítem da lista.',
